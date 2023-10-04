@@ -1,0 +1,72 @@
+{
+  "name": "bot-casthethon",
+  "version": "1.0.0",
+  "description": "Bot a ser usado no castlethon",
+  "scripts": {
+    "postinstall": "tsx src/bot/utils/python/venv.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && tsc-alias",
+    "postbuild": "tsx src/build.ts",
+    "api:start": "node dist/api/server.js",
+    "bot:start": "node dist/bot/index.js",
+    "api:dev": "npx nodemon --require tsconfig-paths/register src/api/server.ts",
+    "bot:dev": "npx nodemon --require tsconfig-paths/register src/bot/index.ts",
+    "pm2:start": "pm2 start dist/api/server.js && pm2 start dist/bot/index.js",
+    "pm2:stop": "pm2 stop all"
+  },
+  "contributors": [
+    {
+      "name": "Pedro Augusto de Portilho Ronzani",
+      "email": "pedroaugustogabironzani@hotmail.com"
+    }
+  ],
+  "keywords": [
+    "compet",
+    "discord",
+    "bot",
+    "gerenciamento"
+  ],
+  "author": "Compet",
+  "license": "MIT",
+  "dependencies": {
+    "@types/nodemailer": "^6.4.10",
+    "@types/uuid": "^9.0.4",
+    "blob-util": "^2.0.2",
+    "body-parser": "^1.20.2",
+    "discord.js": "^14.13.0",
+    "dotenv": "^16.3.1",
+    "extract-files": "^13.0.0",
+    "fastify": "^4.22.2",
+    "glob": "^10.3.4",
+    "googleapis": "^126.0.1",
+    "mongoose": "^7.5.0",
+    "node-fetch": "^2.6.7",
+    "nodemailer": "^6.9.5",
+    "pm2": "^5.3.0",
+    "python-shell": "^5.0.0",
+    "tsconfig-paths": "^4.2.0",
+    "uuid": "^9.0.1",
+    "zod": "^3.22.2"
+  },
+  "devDependencies": {
+    "@types/apollo-upload-client": "^17.0.2",
+    "@types/form-data": "^2.5.0",
+    "@types/glob": "^8.1.0",
+    "@types/node": "^20.5.9",
+    "@types/node-fetch": "^2.6.4",
+    "@types/shelljs": "^0.8.12",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0",
+    "nodemon": "^3.0.1",
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.7",
+    "tsx": "^3.12.10",
+    "typescript": "^5.2.2"
+  },
+  "paths": {
+    "@/*": [
+      "./src/*"
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+{
+    "modalBuilderRequest": {
+        "title": "Emita o certificado de um palestrante",
+        "customId": "speakercertificate"
+    },
+    "inputFields": [
+        {
+            "label": "Qual o titulo do evento?",
+            "placeholder": "COMPET Talks",
+            "customId": "titulo",
+            "required": true,
+            "style": 1
+        },
+        {
+            "label": "Quais os nomes dos palestrantes?",
+            "placeholder": "Sandro Renato, André Rodrigues, Natália Batista",
+            "customId": "nomes",
+            "required": true,
+            "style": 1
+        },
+        {
+            "label": "Qual email do assinante?",
+            "placeholder": "email@email.com",
+            "customId": "email_assinante",
+            "required": true,
+            "style": 1
+        },
+        {
+            "label": "Quanto tempo (em minutos) de talks?",
+            "placeholder": "120",
+            "customId": "minutos_totais",
+            "required": true,
+            "style": 1
+        },
+        {
+            "label": "Qual a data do talks?",
+            "placeholder": "01-02-2004",
+            "customId": "data_completa",
+            "required": true,
+            "style": 1
+        }
+    ]
+}
