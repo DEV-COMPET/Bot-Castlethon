@@ -1,7 +1,7 @@
 import { Entity } from "@/api/@types/entity";
 import { UniqueEntityID } from "@/api/@types/unique-entity-id";
 import mongoose from "mongoose";
-import { Member, MemberModel } from "./membro.entity";
+import { Member, MemberModel } from "./member.entity";
 
 export type TeamsProps = {
     name: string,

@@ -1,6 +1,6 @@
 import { BaseRepository } from '../../../@types/repository';
-import { MemberType } from '../entities/membro.entity';
-import { MemberData } from './defaultMongoDBRepository/competianoRepository';
+import { MemberType } from '../entities/member.entity';
+import { MemberData } from './defaultMongoDBRepository/memberRepository';
 export abstract class Repository<T> implements BaseRepository<T> {
 	public abstract create(data: T): Promise<T | undefined> | T | undefined;
 	public abstract list(): Promise<T[]> | T[];

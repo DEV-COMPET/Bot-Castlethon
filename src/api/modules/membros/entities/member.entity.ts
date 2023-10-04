@@ -8,7 +8,7 @@ export type MemberType = {
     email: string,
     role: string,
     institution: string,
-    teamId: string,
+    teamId?: string,
     created_at?: Date
     updated_at?: Date
 };
@@ -35,7 +35,7 @@ const schema = new mongoose.Schema<MemberType>(
         profile_picture: { type: String, required: true },
         email: { type: String, required: true },
         role: { type: String, required: true },
-        teamId: { type: String, required: true },
+        teamId: { type: String, required: false },
         institution: { type: String, required: true },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, required: true },

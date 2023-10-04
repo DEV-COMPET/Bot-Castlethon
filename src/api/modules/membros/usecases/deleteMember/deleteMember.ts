@@ -1,19 +1,19 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { makeDeleteCompetianoUseCase } from './makeDeleteCompetianoUseCase';
+import { makeDeleteMemberUseCase } from './makeDeleteMemberUseCase';
 
 export const deleteUserBodySchema = z.object({
-	nome: z.string(),
+	name: z.string(),
 });
 
-export async function deleteCompetiano(request: FastifyRequest, reply: FastifyReply) {
+export async function deleteMember(request: FastifyRequest, reply: FastifyReply) {
 
-	const { nome } = deleteUserBodySchema.parse(request.body);
+	const { name } = deleteUserBodySchema.parse(request.body);
 
-	const deleteUserUseCase = makeDeleteCompetianoUseCase()
+	const deleteUserUseCase = makeDeleteMemberUseCase()
 
 	const user = await deleteUserUseCase.execute({
-		nome
+		name
 	});
 
 	if (user.isLeft()) {

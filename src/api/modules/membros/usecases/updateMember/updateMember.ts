@@ -1,21 +1,14 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { makeUpdateCompetianoUseCase } from './makeUpdateCompetianoUseCase';
+import { makeUpdateMemberUseCase } from './makeUpdateMemberUseCase';
 
 const updateUserDataBodySchema = z.object({
-    nome: z.string().optional(),
-    data_inicio: z.date().optional(),
-    email: z.string().optional(),
-    membro_ativo: z.boolean().optional(),
-    tutor: z.boolean().optional(),
-    scrum_master: z.boolean().optional(),
-    intercambio: z.boolean().optional(),
-    data_fim: z.date().optional(),
-    lates: z.string().optional(),
-    linkedin: z.string().optional(),
-    depoimentos: z.string().optional(),
-    url_imagem: z.string().optional(),
-    advertencias: z.number().optional()
+	name: z.string().optional(),
+	profile_picture: z.string().optional(),
+	email: z.string().optional(),
+	role: z.string().optional(),
+	institution: z.string().optional(),
+	teamId: z.string().optional(),
 })
 
 const updateUserNameBodySchema = z.object({
@@ -23,13 +16,13 @@ const updateUserNameBodySchema = z.object({
 });
 
 
-export async function updateCompetiano(request: FastifyRequest, reply: FastifyReply) {
+export async function updateMember(request: FastifyRequest, reply: FastifyReply) {
 
     const { nome } = updateUserNameBodySchema.parse(request.params)
 
     const updateUserDateParamsSchema = updateUserDataBodySchema.parse(request.body);
 
-    const updateUserUseCase = makeUpdateCompetianoUseCase()
+    const updateUserUseCase = makeUpdateMemberUseCase()
 
     const user = await updateUserUseCase.execute({ nome, updatedDate: updateUserDateParamsSchema })
 

@@ -1,6 +1,6 @@
-import type { MemberRepository as InterfaceMemberRepository } from "../";
+import type { MemberRepository as InterfaceMemberRepository } from "..";
 import { DefaultMongoDBRepository } from ".";
-import { MemberModel, MemberType } from "../../entities/membro.entity";
+import { MemberModel, MemberType } from "../../entities/member.entity";
 
 export type MemberData = {
   name?: string,
@@ -14,11 +14,11 @@ export type MemberData = {
 };
 
 export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType> implements InterfaceMemberRepository {
- 
+
   constructor(private memberModel = MemberModel) {
     super(memberModel);
   }
- 
+
   public async list(): Promise<MemberType[]> {
     const members = this.memberModel.find();
     const result = (await members).map((member) => {
@@ -27,19 +27,19 @@ export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType
     });
     return result;
   }
- 
+
   public async getByName(nome: string): Promise<MemberType | undefined> {
     const member = await this.memberModel.findOne({ nome });
     const result: MemberType | undefined = member?.toJSON();
     return result;
   }
- 
+
   public async getByEmail(email: string): Promise<MemberType | undefined> {
     const member = await this.memberModel.findOne({ email });
     const result: MemberType | undefined = member?.toJSON();
     return result;
   }
- 
+
   public async create(data: MemberType): Promise<MemberType | undefined> {
     const model = new this.memberModel(data);
     const createdData = await model.save();
@@ -49,7 +49,7 @@ export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType
     const result: MemberType = createdData.toJSON<MemberType>();
     return result;
   }
- 
+
   public async deleteByName(nome: string): Promise<MemberType | undefined> {
     const deletedMember = await this.memberModel.findOne({ nome });
     if (!deletedMember) {
@@ -58,7 +58,7 @@ export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType
     await deletedMember.deleteOne();
     return deletedMember.toJSON<MemberType>();
   }
- 
+
   public async update(nome: string, data: MemberData): Promise<MemberType | undefined> {
     const updatedMember = await this.memberModel.findOneAndUpdate(
       { nome },

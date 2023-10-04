@@ -2,12 +2,15 @@ import fastify from "fastify";
 import { env } from "@/env";
 import "../database"
 
-const port = env.PORT
+import { membersRoutes } from "./routes/competianos.routes";
+
 const app = fastify();
 
+app.register(membersRoutes)
+
 app.listen({
-	host: '0.0.0.0', // auxilia front-end a conectar com aplicação mais pra frente
-	port: port,
+	host: '0.0.0.0', 
+	port: env.PORT,
 }).then(() => {
-	console.log(`server listening on port ${port}`);
+	console.log(`server listening on port ${env.PORT}`);
 });
