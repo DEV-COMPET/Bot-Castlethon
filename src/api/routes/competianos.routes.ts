@@ -1,9 +1,9 @@
 import { FastifyInstance } from 'fastify';
-import { listMember } from '../modules/membros/usecases/listMember/listMember';
-import { getMemberByEmail } from '../modules/membros/usecases/getMemberByEmail/getMemberByEmail';
-import { createMember } from '../modules/membros/usecases/createMember/createMember';
-import { updateMember } from '../modules/membros/usecases/updateMember/updateMember';
-import { deleteMember } from '../modules/membros/usecases/deleteMember/deleteMember';
+import { listMember } from '../modules/members/usecases/listMember/listMember';
+import { getMemberByEmail } from '../modules/members/usecases/getMemberByEmail/getMemberByEmail';
+import { createMember } from '../modules/members/usecases/createMember/createMember';
+import { updateMember } from '../modules/members/usecases/updateMember/updateMember';
+import { deleteMember } from '../modules/members/usecases/deleteMember/deleteMember';
 
 export async function membersRoutes(app: FastifyInstance) {
     app.get('/', listMember)

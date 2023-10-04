@@ -1,42 +1,36 @@
 import { Entity } from "@/api/@types/entity";
 import { UniqueEntityID } from "@/api/@types/unique-entity-id";
 import mongoose from "mongoose";
+import { Member, MemberModel } from "./member.entity";
 
-export type MemberType = {
+export type TeamProps = {
     name: string,
     profile_picture?: string,
-    email: string,
-    role: string,
+    members: Member[],
     institution: string,
-    teamId?: string,
     created_at?: Date
     updated_at?: Date
 };
 
-export class Member extends Entity<MemberType> {
+export class Team extends Entity<TeamProps> {
 
-    constructor(props: MemberType, id?: UniqueEntityID) {
+    constructor(props: TeamProps, id?: UniqueEntityID) {
         super(props, id)
     }
 
     get name() { return this.props.name }
     get profile_picture() { return this.props.profile_picture }
-    get email() { return this.props.email }
-    get role() { return this.props.role }
     get institution() { return this.props.institution }
-    get teamId() { return this.props.teamId }
     get created_at() { return this.props.created_at }
     get updated_at() { return this.props.updated_at }
 }
 
-const schema = new mongoose.Schema<MemberType>(
+const schema = new mongoose.Schema<TeamProps>(
     {
         name: { type: String, required: true },
         profile_picture: { type: String, required: true },
-        email: { type: String, required: true },
-        role: { type: String, required: true },
-        teamId: { type: String, required: false },
         institution: { type: String, required: true },
+        members: { type: [MemberModel], required: true },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, required: true },
     },
@@ -53,4 +47,4 @@ const schema = new mongoose.Schema<MemberType>(
     }
 );
 
-export const MemberModel = mongoose.model<MemberType>("membros", schema);
+export const TeamModel = mongoose.model<TeamProps>("membros", schema);
