@@ -2,8 +2,8 @@ import { MemberMongoDBRepository } from "../../repositories/defaultMongoDBReposi
 import { ListMemberUseCase } from "./listMemberUseCase"
 
 export function makeListMemberUseCase() {
-    const usersRepository = new MemberMongoDBRepository()
-    const useCase = new ListMemberUseCase(usersRepository)
+    const membersRepository = new MemberMongoDBRepository()
+    const useCase = new ListMemberUseCase(membersRepository)
 
     return useCase
 }

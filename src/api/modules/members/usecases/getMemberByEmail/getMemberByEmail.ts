@@ -3,13 +3,13 @@ import { z } from 'zod';
 import { validateEmail } from '../../validators';
 import { makeGetMemberByEmailUseCase } from './makeGetMemberByEmailUseCase';
 
-const userEmailBodySchema = z.object({
+const memberEmailBodySchema = z.object({
 	email: z.string()
 })
 
 export async function getMemberByEmail(request: FastifyRequest, reply: FastifyReply) {
 
-	const { email } = userEmailBodySchema.parse(request.params);
+	const { email } = memberEmailBodySchema.parse(request.params);
 
 	if (!validateEmail(email))
 		return reply
@@ -18,13 +18,13 @@ export async function getMemberByEmail(request: FastifyRequest, reply: FastifyRe
 
 	const getMemberByEmailUseCase = makeGetMemberByEmailUseCase()
 
-	const user = await getMemberByEmailUseCase.execute({ email })
+	const member = await getMemberByEmailUseCase.execute({ email })
 
-	if (user.isLeft()) {
+	if (member.isLeft()) {
 		return reply
 			.status(404)
-			.send({ message: "Membro não encontrado", error_message: user.value.message })
+			.send({ message: "Membro não encontrado", error_message: member.value.message })
 	}
 
-	return reply.status(201).send({ updated_user: user.value.member });
+	return reply.status(201).send({ updated_member: member.value.member });
 }

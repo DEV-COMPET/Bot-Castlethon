@@ -2,25 +2,25 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { makeDeleteMemberUseCase } from './makeDeleteMemberUseCase';
 
-export const deleteUserBodySchema = z.object({
+export const deleteMemberBodySchema = z.object({
 	name: z.string(),
 });
 
 export async function deleteMember(request: FastifyRequest, reply: FastifyReply) {
 
-	const { name } = deleteUserBodySchema.parse(request.body);
+	const { name } = deleteMemberBodySchema.parse(request.body);
 
-	const deleteUserUseCase = makeDeleteMemberUseCase()
+	const deleteMemberUseCase = makeDeleteMemberUseCase()
 
-	const user = await deleteUserUseCase.execute({
+	const member = await deleteMemberUseCase.execute({
 		name
 	});
 
-	if (user.isLeft()) {
+	if (member.isLeft()) {
 		return reply
 			.status(404)
-			.send({ error_message: user.value.message })
+			.send({ error_message: member.value.message })
 	}
 
-	return reply.status(201).send({ deleted_user: user.value.deletedMember });
+	return reply.status(201).send({ deleted_member: member.value.deletedMember });
 }

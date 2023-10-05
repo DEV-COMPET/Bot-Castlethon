@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 import { makeUpdateMemberUseCase } from './makeUpdateMemberUseCase';
 
-const updateUserDataBodySchema = z.object({
+export const updateMemberDataBodySchema = z.object({
 	name: z.string().optional(),
 	profile_picture: z.string().optional(),
 	email: z.string().optional(),
@@ -11,30 +11,30 @@ const updateUserDataBodySchema = z.object({
 	teamId: z.string().optional(),
 })
 
-const updateUserNameBodySchema = z.object({
+const updateMemberNameBodySchema = z.object({
     nome: z.string(),
 });
 
 
 export async function updateMember(request: FastifyRequest, reply: FastifyReply) {
 
-    const { nome } = updateUserNameBodySchema.parse(request.params)
+    const { nome } = updateMemberNameBodySchema.parse(request.params)
 
-    const updateUserDateParamsSchema = updateUserDataBodySchema.parse(request.body);
+    const updateMemberDateParamsSchema = updateMemberDataBodySchema.parse(request.body);
 
-    const updateUserUseCase = makeUpdateMemberUseCase()
+    const updateMemberUseCase = makeUpdateMemberUseCase()
 
-    const user = await updateUserUseCase.execute({ nome, updatedDate: updateUserDateParamsSchema })
+    const member = await updateMemberUseCase.execute({ nome, updatedDate: updateMemberDateParamsSchema })
 
-    if (user.isLeft()) {
+    if (member.isLeft()) {
         return reply
             .status(404)
             .send({
                 code: reply.statusCode,
                 message: "Membro não encontrado.",
-                error_message: user.value.message
+                error_message: member.value.message
             })
     }
 
-    return reply.status(201).send({ updated_user: user.value.updatedMember });
+    return reply.status(201).send({ updated_member: member.value.updatedMember });
 }

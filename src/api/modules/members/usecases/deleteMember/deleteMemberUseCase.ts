@@ -21,7 +21,7 @@ export class DeleteMemberUseCase {
     const deletedMember = await this.repository.deleteByName(name);
 
     if (!deletedMember) 
-      return left(new ResourceNotFoundError("User"));
+      return left(new ResourceNotFoundError("Member"));
     
     return right({ deletedMember });
   }

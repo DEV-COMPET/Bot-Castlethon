@@ -2,8 +2,8 @@ import { MemberMongoDBRepository } from "../../repositories/defaultMongoDBReposi
 import { DeleteMemberUseCase } from "./deleteMemberUseCase"
 
 export function makeDeleteMemberUseCase() {
-    const usersRepository = new MemberMongoDBRepository()
-    const useCase = new DeleteMemberUseCase(usersRepository)
+    const membersRepository = new MemberMongoDBRepository()
+    const useCase = new DeleteMemberUseCase(membersRepository)
 
     return useCase
 }
