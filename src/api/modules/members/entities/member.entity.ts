@@ -8,7 +8,7 @@ export type MemberType = {
     email: string,
     role: string,
     institution: string,
-    teamId?: string,
+    teamName?: string,
     created_at?: Date
     updated_at?: Date
 };
@@ -24,7 +24,7 @@ export class Member extends Entity<MemberType> {
     get email() { return this.props.email }
     get role() { return this.props.role }
     get institution() { return this.props.institution }
-    get teamId() { return this.props.teamId }
+    get teamName() { return this.props.teamName }
     get created_at() { return this.props.created_at }
     get updated_at() { return this.props.updated_at }
 }
@@ -32,10 +32,10 @@ export class Member extends Entity<MemberType> {
 export const memberSchema = new mongoose.Schema<MemberType>(
     {
         name: { type: String, required: true },
-        profile_picture: { type: String, required: true },
+        profile_picture: { type: String, required: false },
         email: { type: String, required: true },
         role: { type: String, required: true },
-        teamId: { type: String, required: false },
+        teamName: { type: String, required: false },
         institution: { type: String, required: true },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, required: true },

@@ -1,6 +1,6 @@
 import type { MemberRepository as InterfaceMemberRepository } from "..";
 import { DefaultMongoDBRepository } from ".";
-import { MemberModel, MemberType } from "../../entities/member.entity";
+import { Member, MemberModel, MemberType } from "../../entities/member.entity";
 
 export type MemberData = {
   name?: string,
@@ -28,8 +28,8 @@ export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType
     return result;
   }
 
-  public async getByName(nome: string): Promise<MemberType | undefined> {
-    const member = await this.memberModel.findOne({ nome });
+  public async getByName(name: string): Promise<MemberType | undefined> {
+    const member = await this.memberModel.findOne({ name });
     const result: MemberType | undefined = member?.toJSON();
     return result;
   }
@@ -40,8 +40,8 @@ export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType
     return result;
   }
 
-  public async create(data: MemberType): Promise<MemberType | undefined> {
-    const model = new this.memberModel(data);
+  public async create(data: Member): Promise<MemberType | undefined> {
+    const model = new this.memberModel(data._data);
     const createdData = await model.save();
     if (!createdData) {
       throw new Error("Failed to create new Data");
