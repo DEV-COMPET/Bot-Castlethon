@@ -7,7 +7,7 @@ import { MemberType } from "@/api/modules/members/entities/member.entity";
 interface CreateTeamUseCaseRequest {
   name: string,
   profile_picture?: string,
-  members: MemberType[],
+  members?: MemberType[],
   institution: string,
 }
 
@@ -26,7 +26,7 @@ export class CreateTeamUseCase {
     if (teamExists)
       return left(new ResourceAlreadyExistsError("Team"))
 
-    const team = new Team({ institution, members, name, profile_picture });
+    const team = new Team({ institution, members, name, profile_picture, created_at: new Date(), updated_at: new Date() });
 
     await this.repository.create(team);
 

@@ -1,6 +1,6 @@
 import type { TeamRepository as InterfaceTeamRepository } from "..";
 import { DefaultMongoDBRepository } from ".";
-import { TeamModel, TeamType } from "../../entities/team.entity";
+import { Team, TeamModel, TeamType } from "../../entities/team.entity";
 import { MemberType } from "@/api/modules/members/entities/member.entity";
 
 export type TeamData = {
@@ -33,13 +33,18 @@ export class TeamMongoDBRepository extends DefaultMongoDBRepository<TeamType> im
     return result;
   }
 
-  public async create(data: TeamType): Promise<TeamType | undefined> {
-    const model = new this.teamModel(data);
+  public async create(data: Team): Promise<TeamType | undefined> {
+    
+    const model = new this.teamModel(data._data)
+    
     const createdData = await model.save();
+
     if (!createdData) {
       throw new Error("Failed to create new Data");
     }
+
     const result: TeamType = createdData.toJSON<TeamType>();
+    
     return result;
   }
 

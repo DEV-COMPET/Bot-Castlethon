@@ -6,6 +6,8 @@ export abstract class Entity<Props> {
 
   get id() { return this._id }
 
+  get _data() { return this.props }
+
   protected constructor(props: Props, id?: UniqueEntityID) {
     this.props = props
     this._id = id ?? new UniqueEntityID()

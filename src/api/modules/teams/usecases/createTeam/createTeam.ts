@@ -7,7 +7,7 @@ import { createMemberBodySchema } from '@/api/modules/members/usecases/createMem
 export const createTeamBodySchema = z.object({
 	name: z.string(),
 	profile_picture: z.string().optional(),
-	members: z.array(createMemberBodySchema),
+	members: z.array(createMemberBodySchema).optional(),
 	institution: z.string(),
 });
 

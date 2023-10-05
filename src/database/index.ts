@@ -5,7 +5,7 @@ mongoose.set('strictQuery', true);
 const { MONGODB_USER } = env
 const MONGODB_PASSWORD = encodeURIComponent(env.MONGODB_PASSWORD ? env.MONGODB_PASSWORD : '') || env.MONGODB_PASSWORD
 
-const MONGODB_URI = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@sitecompet.nk50e.mongodb.net/castlethon?retryWrites=true&w=majority`
+const MONGODB_URI = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@sitecompet.nk50e.mongodb.net/Castlethon?retryWrites=true&w=majority`
 
 if (!MONGODB_USER || MONGODB_URI == '' || !MONGODB_PASSWORD || MONGODB_PASSWORD == '') {
   mongoose.connect('mongodb://localhost:27017/test').then(() => {

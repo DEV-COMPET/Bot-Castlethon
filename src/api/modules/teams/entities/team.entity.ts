@@ -6,7 +6,7 @@ import { MemberType, memberSchema } from "../../members/entities/member.entity";
 export type TeamType = {
     name: string,
     profile_picture?: string,
-    members: MemberType[],
+    members?: MemberType[],
     institution: string,
     created_at?: Date
     updated_at?: Date
@@ -24,14 +24,15 @@ export class Team extends Entity<TeamType> implements TeamType {
     get members() { return this.props.members }
     get created_at() { return this.props.created_at }
     get updated_at() { return this.props.updated_at }
+
 }
 
 export const teamSchema = new mongoose.Schema<TeamType>(
     {
         name: { type: String, required: true },
-        profile_picture: { type: String, required: true },
+        profile_picture: { type: String, required: false },
         institution: { type: String, required: true },
-        members: { type: [memberSchema], required: true },
+        members: { type: [memberSchema], required: false },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, required: true },
     },
