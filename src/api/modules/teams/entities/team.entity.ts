@@ -1,7 +1,7 @@
 import { Entity } from "@/api/@types/entity";
 import { UniqueEntityID } from "@/api/@types/unique-entity-id";
 import mongoose from "mongoose";
-import { MemberModel, MemberType } from "../../members/entities/member.entity";
+import { MemberType, memberSchema } from "../../members/entities/member.entity";
 
 export type TeamType = {
     name: string,
@@ -26,16 +26,15 @@ export class Team extends Entity<TeamType> implements TeamType {
     get updated_at() { return this.props.updated_at }
 }
 
-const schema = new mongoose.Schema<TeamType>(
+export const teamSchema = new mongoose.Schema<TeamType>(
     {
         name: { type: String, required: true },
         profile_picture: { type: String, required: true },
         institution: { type: String, required: true },
-        members: { type: [MemberModel], required: true },
+        members: { type: [memberSchema], required: true },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, required: true },
     },
-
     {
         versionKey: false,
         toJSON: {
@@ -48,4 +47,4 @@ const schema = new mongoose.Schema<TeamType>(
     }
 );
 
-export const TeamModel = mongoose.model<TeamType>("membros", schema);
+export const TeamModel = mongoose.model<TeamType>("teams", teamSchema);

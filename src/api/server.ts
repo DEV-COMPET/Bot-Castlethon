@@ -2,11 +2,13 @@ import fastify from "fastify";
 import { env } from "@/env";
 import "../database"
 
-import { membersRoutes } from "./routes/competianos.routes";
+import { membersRoutes } from "./routes/members.routes";
+import { teamsRoutes } from "./routes/teams.routes";
 
 const app = fastify();
 
-app.register(membersRoutes)
+app.register(membersRoutes, { prefix: 'member' })
+app.register(teamsRoutes, { prefix: 'team' })
 
 app.listen({
 	host: '0.0.0.0', 

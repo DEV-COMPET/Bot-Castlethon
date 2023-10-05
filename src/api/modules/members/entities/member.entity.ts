@@ -29,7 +29,7 @@ export class Member extends Entity<MemberType> {
     get updated_at() { return this.props.updated_at }
 }
 
-const schema = new mongoose.Schema<MemberType>(
+export const memberSchema = new mongoose.Schema<MemberType>(
     {
         name: { type: String, required: true },
         profile_picture: { type: String, required: true },
@@ -52,4 +52,4 @@ const schema = new mongoose.Schema<MemberType>(
     }
 );
 
-export const MemberModel = mongoose.model<MemberType>("members", schema);
+export const MemberModel = mongoose.model<MemberType>("members", memberSchema);
