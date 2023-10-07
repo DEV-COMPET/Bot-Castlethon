@@ -1,6 +1,6 @@
 import { ExtendedClient } from "./structures/Client";
-import { checkAndCreateVenv } from "./utils/python/venv";
+// import { checkAndCreateVenv } from "./utils/python/venv";
 
-checkAndCreateVenv()
+// checkAndCreateVenv()
 export const client = new ExtendedClient()
 client.start()
