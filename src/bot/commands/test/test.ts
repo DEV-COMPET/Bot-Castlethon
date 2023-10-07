@@ -1,6 +1,6 @@
 import { testMenu } from "@/bot/selectMenus/test/test";
 import { Command } from "@/bot/structures/Command";
-import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
+import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 
 export default new Command({
   name: "menu",
@@ -9,7 +9,8 @@ export default new Command({
 
     await interaction.reply({
       content: "menus",
-      components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(testMenu)]
+      components: [makeStringSelectMenuComponent(testMenu)],
+      ephemeral: true
     });
   },
 });
