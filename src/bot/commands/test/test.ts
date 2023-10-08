@@ -9,7 +9,7 @@ export default new Command({
 
     await interaction.reply({
       content: "menus",
-      components: [makeStringSelectMenuComponent(testMenu)],
+      components: [await makeStringSelectMenuComponent(testMenu)],
       ephemeral: true
     });
   },

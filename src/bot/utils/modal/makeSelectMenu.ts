@@ -7,7 +7,7 @@ export function makeStringSelectMenu(menuData: StringSelectMenuComponentData): S
   return menu
 }
 
-export function makeStringSelectMenuComponent(menu: StringSelectMenuBuilder): ActionRowBuilder<StringSelectMenuBuilder> {
+export async function makeStringSelectMenuComponent(menu: StringSelectMenuBuilder): Promise<ActionRowBuilder<StringSelectMenuBuilder>> {
 
   return new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(menu)
 }

@@ -1,10 +1,11 @@
 import { readJsonFileRequest } from "../json";
 import { ExtendedModalInteraction } from "@/bot/typings/Modals";
 import { makeEmbed } from "./makeEmbed";
+import { ExtendedInteraction } from "@/bot/typings/Commands";
 
 export interface makeEmbedRequest {
     json?: readJsonFileRequest
-    interaction: ExtendedModalInteraction
+    interaction: ExtendedModalInteraction | ExtendedInteraction
     error: {
         code: number,
         message: string

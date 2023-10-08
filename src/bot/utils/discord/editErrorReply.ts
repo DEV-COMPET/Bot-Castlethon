@@ -1,9 +1,10 @@
 import { ExtendedModalInteraction } from "@/bot/typings/Modals"
 import { makeErrorEmbed } from "../embed/makeErrorEmbed"
+import { ExtendedInteraction } from "@/bot/typings/Commands"
 
 interface EditErrorReplyRequest {
     error: Error
-    interaction: ExtendedModalInteraction
+    interaction: ExtendedModalInteraction | ExtendedInteraction
     title: string
 }
 
