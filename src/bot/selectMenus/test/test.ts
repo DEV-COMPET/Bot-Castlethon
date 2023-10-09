@@ -1,20 +1,23 @@
-import { StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
+import { ComponentType } from "discord.js";
 import { SelectMenu } from "@/bot/structures/SelectMenu";
+import { makeStringSelectMenu } from "@/bot/utils/modal/makeSelectMenu";
 
-const testMenu = new StringSelectMenuBuilder()
-    .setCustomId('sub-menu')
-    .setMinValues(1)
-    .setMaxValues(1)
-    .setOptions(
-        new StringSelectMenuOptionBuilder({
-            label: "Option 1",
-            value: "https://example.com/option1"
-        }),
-        new StringSelectMenuOptionBuilder({
-            label: "Option 2",
-            value: "https://example.com/option2"
-        })
-    );
+const testMenu = makeStringSelectMenu({
+    customId: 'sub-menu',
+    minValues: 1,
+    maxValues: 1,
+    type: ComponentType.StringSelect,
+    options: [
+        {
+            label: "Titulo 1",
+            value: "Valor 1"
+        },
+        {
+            label: "Titulo 2",
+            value: "Valor 2"
+        }
+    ]
+})
 
 export default new SelectMenu({
     customId: "sub-menu",
@@ -24,6 +27,8 @@ export default new SelectMenu({
         await interaction.deferReply({ ephemeral: true })
 
         console.log("Foi chamado")
+
+        console.dir({valores: interaction.values})
 
         return await interaction.editReply({
             content: `You selected: ${interaction.values[0]}`

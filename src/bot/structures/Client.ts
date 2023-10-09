@@ -1,4 +1,4 @@
-import { Client, ClientEvents, Collection, GatewayIntentBits, Routes, REST, Webhook, TextChannel } from "discord.js";
+import { Client, ClientEvents, Collection, GatewayIntentBits, Routes, REST, Webhook, TextChannel, IntentsBitField } from "discord.js";
 import { CommandType } from "../typings/Commands";
 import { RegisterCommandsOptions } from "../typings/client";
 import { Event } from "./Event";
@@ -22,7 +22,7 @@ export class ExtendedClient extends Client {
     webhook?: Webhook;
 
     constructor() {
-        super({ intents: [GatewayIntentBits.Guilds] });
+        super({ intents: [GatewayIntentBits.Guilds, IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMembers] });
     }
 
     private async folderFiles(dir: string) {
@@ -87,21 +87,18 @@ export class ExtendedClient extends Client {
         try {
             const { dirFiles, directory } = await this.folderFiles("selectMenus")
 
-            await dirFiles.forEach(async (filepath) => {
+            console.log({ selectMenus: dirFiles });
+
+            dirFiles.forEach(async (filepath) => {
 
                 const selectmenu: StringSelectMenuType = await this.importFile(
                     path.join(directory, filepath)
                 );
                 if (!selectmenu) {
-                    console.log("Não achou saporra")
                     return;
                 }
-                await this.selectMenus.set(selectmenu.customId, selectmenu);
-                console.dir({ menu: this.selectMenus.at(0)})
+                this.selectMenus.set(selectmenu.customId, selectmenu);
             });
-
-            console.log({ selectMenus: dirFiles });
-
 
         } catch (error) {
             console.error(error);

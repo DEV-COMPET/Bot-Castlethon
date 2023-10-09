@@ -9,6 +9,9 @@ export type MemberType = {
     role: string,
     institution: string,
     teamName?: string,
+    discord_id: string,
+    discord_username: string
+    discord_nickname?: string
     created_at?: Date
     updated_at?: Date
 };
@@ -25,6 +28,9 @@ export class Member extends Entity<MemberType> {
     get role() { return this.props.role }
     get institution() { return this.props.institution }
     get teamName() { return this.props.teamName }
+    get discord_id() { return this.props.discord_id }
+    get discord_username() { return this.props.discord_username }
+    get discord_nickname() { return this.props.discord_nickname }
     get created_at() { return this.props.created_at }
     get updated_at() { return this.props.updated_at }
 }
@@ -37,6 +43,9 @@ export const memberSchema = new mongoose.Schema<MemberType>(
         role: { type: String, required: true },
         teamName: { type: String, required: false },
         institution: { type: String, required: true },
+        discord_id: { type: String, required: true },
+        discord_nickname: { type: String, required: false },
+        discord_username: { type: String, required: true },
         created_at: { type: Date, required: true },
         updated_at: { type: Date, required: true },
     },

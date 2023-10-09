@@ -1,0 +1,20 @@
+{
+    "inputFields": [
+        {
+            "label": "Qual o email do usuario?",
+            "placeholder": "email@email.com",
+            "customId": "email",
+            "required": true,
+            "style": 1,
+            "type": 4
+        }, 
+        {
+            "label": "Qual a instituição do usuario?",
+            "placeholder": "CEFET",
+            "customId": "institution",
+            "required": true,
+            "style": 1,
+            "type": 4
+        }
+    ]
+}
