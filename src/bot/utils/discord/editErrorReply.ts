@@ -19,3 +19,16 @@ export async function editErrorReply({ error, interaction, title }: EditErrorRep
         ]
     })
 }
+
+export async function errorReply({ error, interaction, title }: EditErrorReplyRequest) {
+    console.error(error)
+    return await interaction.reply({
+        embeds: [
+            makeErrorEmbed({
+                title, interaction,
+                error: { code: 401, message: error.message },
+            })
+        ],
+        ephemeral: true
+    })
+}

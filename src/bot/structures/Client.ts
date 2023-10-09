@@ -1,4 +1,4 @@
-import { Client, ClientEvents, Collection, GatewayIntentBits, Routes, REST, Webhook, TextChannel } from "discord.js";
+import { Client, ClientEvents, Collection, GatewayIntentBits, Routes, REST, Webhook, TextChannel, IntentsBitField } from "discord.js";
 import { CommandType } from "../typings/Commands";
 import { RegisterCommandsOptions } from "../typings/client";
 import { Event } from "./Event";
@@ -22,7 +22,7 @@ export class ExtendedClient extends Client {
     webhook?: Webhook;
 
     constructor() {
-        super({ intents: [GatewayIntentBits.Guilds] });
+        super({ intents: [GatewayIntentBits.Guilds, IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMembers] });
     }
 
     private async folderFiles(dir: string) {

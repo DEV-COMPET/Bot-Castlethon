@@ -22,3 +22,17 @@ export async function editSucessReply({ interaction, title, fields, url_imagem }
         ]
     })
 }
+
+export async function sucessReply({ interaction, title, fields, url_imagem }: EditSucessReplyRequest) {
+    return await interaction.reply({
+        embeds: [
+            makeSuccessEmbed({
+                title,
+                interaction,
+                fields,
+                url_imagem
+            })
+        ],
+        ephemeral: true
+    })
+}
