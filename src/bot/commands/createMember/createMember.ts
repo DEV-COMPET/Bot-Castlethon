@@ -12,6 +12,7 @@ export interface MemberData {
     id: string,
     nickName: string,
     username: string
+    avatarURL: string
 }
 
 export default new Command({
@@ -38,12 +39,14 @@ export default new Command({
         const members = await guild.members.fetch();
 
         const membersData: MemberData[] = members.map(member => {
-            const { id, globalName, username } = member.user;
+
+            const { id, globalName, username, } = member.user;
 
             return {
                 id,
                 nickName: globalName ?? "", // Provide a default value if globalName is null
-                username
+                username,
+                avatarURL: ""
             };
         });
 
@@ -58,7 +61,7 @@ export default new Command({
 
                 return {
                     label: `${username} (${nickName})`,
-                    value: `${username} /**separator**/ ${nickName} /**separator**/ ${id}`
+                    value: id
                 }
             }),
             maxValues: minMax.max,

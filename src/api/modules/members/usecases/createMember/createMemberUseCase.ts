@@ -12,6 +12,9 @@ interface CreateMemberUseCaseRequest {
   role: string,
   institution: string,
   teamName?: string,
+  discord_id: string,
+  discord_username: string
+  discord_nickname?: string
 }
 
 type CreateMemberUseCaseResponse = Either<
@@ -23,7 +26,7 @@ export class CreateMemberUseCase {
   constructor(private readonly repository: InterfaceCreateMemberRepository,
     private teamRepository: TeamRepository) { }
 
-  async execute({ email, institution, name, role, profile_picture, teamName, }: CreateMemberUseCaseRequest): Promise<CreateMemberUseCaseResponse> {
+  async execute({ email, institution, name, role, profile_picture, teamName, discord_id, discord_username, discord_nickname }: CreateMemberUseCaseRequest): Promise<CreateMemberUseCaseResponse> {
 
     const memberExists = await this.repository.getByName(name);
 
@@ -31,7 +34,8 @@ export class CreateMemberUseCase {
       return left(new ResourceAlreadyExistsError("Member"))
 
     const member = new Member({
-      email, institution, name, role, profile_picture, teamName, created_at: new Date(), updated_at: new Date()
+      email, institution, name, role, profile_picture, teamName, created_at: new Date(), updated_at: new Date(),
+      discord_id, discord_username, discord_nickname
     });
 
     await this.repository.create(member);

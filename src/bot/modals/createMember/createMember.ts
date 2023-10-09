@@ -36,10 +36,13 @@ export default new Modal({
 
         const { email, institution, name } = extractInputData({ interaction, inputFields })
 
-        const { nickName, username } = selectedUserData[0] || {};
+        const { nickName, username, id, avatarURL } = selectedUserData[selectedUserData.length - 1] || {};
         const discordName = nickName ? nickName : (username ? username : "");
 
-        const addMemberToDBReponse = await addMemberToDB({ email, institution, name: name || discordName })
+        const addMemberToDBReponse = await addMemberToDB({
+            discord_id: id, discord_username: username, discord_nickname: nickName,
+            inputData: { email, institution, name: name || discordName}
+        })
         if (addMemberToDBReponse.isLeft())
             await errorReply({
                 error: addMemberToDBReponse.value.error,
@@ -52,7 +55,7 @@ export default new Modal({
                 { name: "Nome", value: name || discordName },
                 { name: "Email", value: email },
                 { name: "Instituição", value: institution }
-            ]
+            ], url_imagem: avatarURL
         })
     }
 });

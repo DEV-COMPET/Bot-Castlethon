@@ -10,11 +10,14 @@ export const createMemberBodySchema = z.object({
 	role: z.string(),
 	institution: z.string(),
 	teamName: z.string().optional(),
+	discord_id: z.string(),
+	discord_username: z.string(),
+	discord_nickname: z.string().optional()
 });
 
 export async function createMember(request: FastifyRequest, reply: FastifyReply) {
 
-	const { email, institution, name, role, teamName, profile_picture } = createMemberBodySchema.parse(request.body);
+	const { email, institution, name, role, teamName, profile_picture, discord_id, discord_username, discord_nickname } = createMemberBodySchema.parse(request.body);
 
 	if (!validateEmail(email))
 		return reply
@@ -34,13 +37,16 @@ export async function createMember(request: FastifyRequest, reply: FastifyReply)
 	const createMemberUseCase = makeCreateMemberUseCase()
 
 	const member = await createMemberUseCase.execute({
-		email, institution, name, role, profile_picture, teamName,
+		email, institution, name, role, profile_picture, teamName, discord_id, discord_username, discord_nickname
 	});
 
 	if (member.isLeft()) {
 		return reply
 			.status(400)
-			.send({ error_message: member.value.message })
+			.send({
+				message: member.value.message,
+				code: reply.statusCode,
+			})
 	}
 
 	return reply

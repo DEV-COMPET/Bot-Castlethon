@@ -13,15 +13,25 @@ type AddMemberToDBResponse = Either<
     { inputData: AddMemberToDBRightResponse }
 >
 
-export async function addMemberToDB(inputData: ExtractInputDataResponse): Promise<AddMemberToDBResponse> {
+interface AddMemberToDBRequest {
+    inputData: ExtractInputDataResponse,
+    discord_id: string,
+    discord_username: string
+    discord_nickname?: string
+}
+
+export async function addMemberToDB({ inputData, discord_id, discord_username, discord_nickname }: AddMemberToDBRequest): Promise<AddMemberToDBResponse> {
+
+    const body = JSON.stringify({
+        ...inputData,
+        discord_id, discord_username, discord_nickname,
+        role: 'USER'
+    })
 
     const requestOptions = {
-        method: "post",
-        body: JSON.stringify({ ...inputData, role: "USER" }),
+        method: "post", body,
         headers: { "Content-Type": "application/json" },
     };
-
-    console.log({input: { ...inputData, role: "USER" }})
 
     const APIUrl = createURL("/member/")
 
