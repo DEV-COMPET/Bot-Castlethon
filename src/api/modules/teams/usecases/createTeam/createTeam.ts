@@ -22,17 +22,20 @@ export async function createTeam(request: FastifyRequest, reply: FastifyReply) {
 			code: reply.statusCode,
 		});
 
-	const createUserUseCase = makeCreateTeamUseCase()
+	const createTeamUseCase = makeCreateTeamUseCase()
 
-	const user = await createUserUseCase.execute({ institution, members, name, profile_picture });
+	const team = await createTeamUseCase.execute({ institution, members, name, profile_picture });
 
-	if (user.isLeft()) {
+	if (team.isLeft()) {
 		return reply
 			.status(400)
-			.send({ error_message: user.value.message })
+			.send({
+				message: team.value.message,
+				code: reply.statusCode,
+			})
 	}
 
 	return reply
 		.status(201)
-		.send(user.value.team);
+		.send(team.value.team);
 }

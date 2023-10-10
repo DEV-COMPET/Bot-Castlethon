@@ -1,0 +1,20 @@
+{
+    "inputFields": [
+        {
+            "label": "Nome to time",
+            "placeholder": "email@email.com",
+            "customId": "name",
+            "required": true,
+            "style": 1,
+            "type": 4
+        }, 
+        {
+            "label": "Qual a instituição do time?",
+            "placeholder": "CEFET",
+            "customId": "institution",
+            "required": true,
+            "style": 1,
+            "type": 4
+        }
+    ]
+}

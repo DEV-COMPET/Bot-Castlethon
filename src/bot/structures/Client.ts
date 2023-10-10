@@ -22,7 +22,7 @@ export class ExtendedClient extends Client {
     webhook?: Webhook;
 
     constructor() {
-        super({ intents: [GatewayIntentBits.Guilds, IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMembers] });
+        super({ intents: [GatewayIntentBits.Guilds, IntentsBitField.Flags.Guilds, IntentsBitField.Flags.GuildMembers, IntentsBitField.Flags.GuildMessages] });
     }
 
     private async folderFiles(dir: string) {

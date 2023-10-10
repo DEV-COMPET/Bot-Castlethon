@@ -27,8 +27,9 @@ export class TeamMongoDBRepository extends DefaultMongoDBRepository<TeamType> im
     return result;
   }
 
-  public async getByName(nome: string): Promise<TeamType | undefined> {
-    const team = await this.teamModel.findOne({ nome });
+  public async getByName(name: string): Promise<TeamType | undefined> {
+    
+    const team = await this.teamModel.findOne({ name });
     const result: TeamType | undefined = team?.toJSON();
     return result;
   }
