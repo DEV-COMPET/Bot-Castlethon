@@ -9,6 +9,7 @@ import { extractInputData } from "./utils/extractInputData";
 import { addTeamToDB } from "./utils/addTeamToDB";
 import { createRole } from "./utils/createRole";
 import { teamColor } from "@/bot/selectMenus/createTeam/variables/color";
+import { createRoleChats } from "./utils/createRoleChats";
 
 const { inputFields }: { inputFields: TextInputComponentData[] } = modalData
 
@@ -39,6 +40,13 @@ export default new Modal({
             return await errorReply({
                 error: createRoleResponse.value.error,
                 interaction, title: "Não foi possivel criar o cargo relacionado ao time"
+            })
+
+        const createRoleChatsResponse = await createRoleChats({ interaction, name, role: createRoleResponse.value.role })
+        if (createRoleChatsResponse.isLeft())
+            return await errorReply({
+                error: createRoleChatsResponse.value.error,
+                interaction, title: "Não foi possivel criar os chats do time"
             })
 
         await sucessReply({
