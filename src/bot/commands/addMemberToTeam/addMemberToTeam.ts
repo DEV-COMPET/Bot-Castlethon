@@ -4,7 +4,7 @@ import { getTeamNames } from "./utils/getTeamNames";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 import { description, name } from "./addMemberToTeamInfo.json"
-import { createTeamsMenu } from "../../selectMenus/addMemberToTeam/utils/createTeamsMenu";
+import { createSelectTeamMenu } from "./utils/createSelectTeamMenu";
 
 export default new Command({
     name, description,
@@ -23,10 +23,11 @@ export default new Command({
                 interaction, title: "Nenhum time cadastrado"
             })
 
-        const teamsMenu = createTeamsMenu({ teamNames: getTeamNamesResponse.value.teamNames })
+        const selectTeamMenu = createSelectTeamMenu({ teamNames: getTeamNamesResponse.value.teamNames })
 
         await interaction.editReply({
-            components: [await makeStringSelectMenuComponent(teamsMenu)],
+            content: "Selecione o time:",
+            components: [await makeStringSelectMenuComponent(selectTeamMenu)],
         });
     },
 });

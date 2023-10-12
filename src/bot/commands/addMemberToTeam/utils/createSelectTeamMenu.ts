@@ -1,13 +1,13 @@
 import { ComponentType, SelectMenuComponentOptionData, StringSelectMenuBuilder } from "discord.js";
-import { name } from "@/bot/commands/addMemberToTeam/addMemberToTeamInfo.json"
-import data from "@/bot/selectMenus/addMemberToTeam/addMemberToTeamTeamMenuData.json"
 import { makeStringSelectMenu } from "@/bot/utils/modal/makeSelectMenu";
 
-interface CreateTeamsMenuRequest {
+import data from "@/bot/selectMenus/addMemberToTeam/selectTeam/selectTeamMenuData.json"
+
+interface CreateSelectTeamMenuRequest {
     teamNames: string[]
 }
 
-export function createTeamsMenu({ teamNames }: CreateTeamsMenuRequest): StringSelectMenuBuilder {
+export function createSelectTeamMenu({ teamNames }: CreateSelectTeamMenuRequest): StringSelectMenuBuilder {
 
     const options: SelectMenuComponentOptionData[] = teamNames.map(name => {
         return {
@@ -16,7 +16,7 @@ export function createTeamsMenu({ teamNames }: CreateTeamsMenuRequest): StringSe
     })
 
     const menu = makeStringSelectMenu({
-        customId: name,
+        customId: data.customId,
         minValues: data.minMax.min,
         maxValues: data.minMax.max,
         type: ComponentType.StringSelect,

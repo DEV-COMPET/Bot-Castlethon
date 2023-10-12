@@ -2,10 +2,11 @@ import { readJsonFileRequest } from "../json";
 import { ExtendedModalInteraction } from "@/bot/typings/Modals";
 import { makeEmbed } from "./makeEmbed";
 import { ExtendedInteraction } from "@/bot/typings/Commands";
+import { ExtendedStringSelectMenuInteraction } from "@/bot/typings/SelectMenu";
 
 export interface makeEmbedRequest {
     json?: readJsonFileRequest
-    interaction: ExtendedModalInteraction | ExtendedInteraction
+    interaction: ExtendedModalInteraction | ExtendedInteraction | ExtendedStringSelectMenuInteraction
     error: {
         code: number,
         message: string
