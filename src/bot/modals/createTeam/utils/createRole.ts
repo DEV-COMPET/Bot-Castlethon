@@ -1,11 +1,12 @@
 import { Either, left, right } from "@/api/@types/either";
 import { DiscordError } from "@/bot/errors/discordError";
 import { ExtendedModalInteraction } from "@/bot/typings/Modals";
-import { Role } from "discord.js";
+import { ColorResolvable, Role } from "discord.js";
 
 interface CreateRoleRequest {
     name: string,
     interaction: ExtendedModalInteraction
+    color: string
 }
 
 type CreateRoleResponse = Either<
@@ -13,7 +14,7 @@ type CreateRoleResponse = Either<
     { role: Role }
 >
 
-export async function createRole({ interaction, name }: CreateRoleRequest): Promise<CreateRoleResponse> {
+export async function createRole({ interaction, name, color }: CreateRoleRequest): Promise<CreateRoleResponse> {
 
     const guild = interaction.guild;
 
@@ -22,14 +23,9 @@ export async function createRole({ interaction, name }: CreateRoleRequest): Prom
             error: new DiscordError("Esse comando so pode ser usado em um server (Erro de Guild)")
         })
 
-    const role = await guild.roles.create({
-        name,
-        color: "Aqua"
-    })
+    const role = await guild.roles.create({ name, color: color as ColorResolvable })
     if (!role)
-        return left({
-            error: new DiscordError("Erro an criação do Cargo")
-        })
+        return left({ error: new DiscordError("Erro an criação do Cargo")})
 
     return right({ role })
 

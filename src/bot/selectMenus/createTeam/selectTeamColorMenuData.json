@@ -1,0 +1,7 @@
+{
+    "customId": "select-team-color",
+    "minMax": {
+        "min": 1,
+        "max": 1
+    }
+}

@@ -8,6 +8,7 @@ import { sucessReply } from "@/bot/utils/discord/editSucessReply";
 import { extractInputData } from "./utils/extractInputData";
 import { addTeamToDB } from "./utils/addTeamToDB";
 import { createRole } from "./utils/createRole";
+import { teamColor } from "@/bot/selectMenus/createTeam/variables/color";
 
 const { inputFields }: { inputFields: TextInputComponentData[] } = modalData
 
@@ -28,23 +29,24 @@ export default new Modal({
 
         const addTeamToDBReponse = await addTeamToDB({ institution, name })
         if (addTeamToDBReponse.isLeft())
-            await errorReply({
+            return await errorReply({
                 error: addTeamToDBReponse.value.error,
                 interaction, title: "Não foi possivel criar o time"
             })
 
-        const createRoleResponse = await createRole({ interaction, name })
-        if(createRoleResponse.isLeft())
-        await errorReply({
-            error: createRoleResponse.value.error,
-            interaction, title: "Não foi possivel criar o cargo relacionado ao time"
-        })
+        const createRoleResponse = await createRole({ interaction, name, color: teamColor[teamColor.length - 1] })
+        if (createRoleResponse.isLeft())
+            return await errorReply({
+                error: createRoleResponse.value.error,
+                interaction, title: "Não foi possivel criar o cargo relacionado ao time"
+            })
 
         await sucessReply({
             interaction, title: "Time criado com Sucesso!!",
             fields: [
-                { name: "Nome", value: name },
-                { name: "Instituição", value: institution }
+                { name: "Nome", value: name, inline: true },
+                { name: "Instituição", value: institution, inline: true },
+                { name: "Cor do Time", value: teamColor[teamColor.length - 1], inline: true }
             ]
         })
     }

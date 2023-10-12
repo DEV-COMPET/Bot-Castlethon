@@ -2,7 +2,7 @@
     "inputFields": [
         {
             "label": "Nome to time",
-            "placeholder": "email@email.com",
+            "placeholder": "Time",
             "customId": "name",
             "required": true,
             "style": 1,
