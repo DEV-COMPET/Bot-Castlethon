@@ -44,12 +44,12 @@ export default new Modal({
             inputData: { email, institution, name: name || discordName}
         })
         if (addMemberToDBReponse.isLeft())
-            await errorReply({
+            return await errorReply({
                 error: addMemberToDBReponse.value.error,
                 interaction, title: "Não foi possivel cirar o membro"
             })
 
-        await sucessReply({
+        return await sucessReply({
             interaction, title: "Usuario criado com Sucesso!!",
             fields: [
                 { name: "Nome", value: name || discordName },
