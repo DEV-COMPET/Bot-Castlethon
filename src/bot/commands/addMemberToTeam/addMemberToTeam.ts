@@ -25,9 +25,6 @@ export default new Command({
 
         const selectTeamMenu = await createSelectTeamMenu({ teamNames: getTeamNamesResponse.value.teamNames })
 
-        const component = await makeStringSelectMenuComponent(selectTeamMenu)
-
-
         await interaction.editReply({
             content: "Selecione o time:",
             components: [await makeStringSelectMenuComponent(selectTeamMenu)],
