@@ -40,6 +40,12 @@ export class MemberMongoDBRepository extends DefaultMongoDBRepository<MemberType
     return result;
   }
 
+  public async getByDiscordId(discord_id: string): Promise<MemberType | undefined> {
+    const member = await this.memberModel.findOne({ discord_id });
+    const result: MemberType | undefined = member?.toJSON();
+    return result;
+  }
+
   public async create(data: Member): Promise<MemberType | undefined> {
     const model = new this.memberModel(data._data);
     const createdData = await model.save();

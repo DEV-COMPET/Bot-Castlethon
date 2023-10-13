@@ -10,16 +10,16 @@ export default new SelectMenu({
 
     run: async ({ interaction }) => {
 
-        console.log("Direto")
+        const memberDiscordId = interaction.values[0]
 
-        const memberName = interaction.values[0]
-
-        const addMemberToTeamInDBResponse = await addMemberToTeamInDB({ memberName, teamName: teamChosen[teamChosen.length - 1] })
+        const addMemberToTeamInDBResponse = await addMemberToTeamInDB({ memberDiscordId, teamName: teamChosen[teamChosen.length - 1] })
         if (addMemberToTeamInDBResponse.isLeft())
             return errorReply({
                 error: addMemberToTeamInDBResponse.value.error, interaction, title: "Erro ao adicionar o membro no tine no DB"
             })
 
-        await sucessReply({ interaction, title: "Membro adicionado ao time" })
+        await sucessReply({ interaction, 
+            title: `Membro ${addMemberToTeamInDBResponse.value.memberName} adicionado ao time ${teamChosen[teamChosen.length - 1]}` 
+        })
     }
 });

@@ -11,8 +11,6 @@ export default new SelectMenu({
 
     run: async ({ interaction }) => {
 
-        console.log("Aqui")
-
         const teamName = interaction.values[0]
 
         teamChosen.push(teamName)

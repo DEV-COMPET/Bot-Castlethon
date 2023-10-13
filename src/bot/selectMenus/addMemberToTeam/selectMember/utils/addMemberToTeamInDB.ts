@@ -3,7 +3,7 @@ import { FetchReponseError } from "@/bot/errors/fetchReponseError";
 import { createURL } from "@/bot/utils/fetch/url";
 
 interface AddMemberToTeamInDBRequest {
-    memberName: string
+    memberDiscordId: string
     teamName: string
 }
 
@@ -12,15 +12,15 @@ type AddMemberToTeamInDBResponse = Either<
     { memberName: string }
 >
 
-export async function addMemberToTeamInDB({ memberName, teamName }: AddMemberToTeamInDBRequest): Promise<AddMemberToTeamInDBResponse> {
-    /*
+export async function addMemberToTeamInDB({ memberDiscordId, teamName }: AddMemberToTeamInDBRequest): Promise<AddMemberToTeamInDBResponse> {
+    
     const body = JSON.stringify({
         teamName: teamName,
-        memberName: memberName
+        memberDiscordId: memberDiscordId
     })
 
     const requestOptions = {
-        method: "post", body,
+        method: "put", body,
         headers: { "Content-Type": "application/json" },
     };
 
@@ -31,7 +31,8 @@ export async function addMemberToTeamInDB({ memberName, teamName }: AddMemberToT
         const { code, message, status }: { code: number; message: string; status: number } = await response.json();
         return left({ error: new FetchReponseError({ code, message, status }) })
     }
-    */
+
+    const memberName = await response.text()
 
     return right({ memberName })
 }

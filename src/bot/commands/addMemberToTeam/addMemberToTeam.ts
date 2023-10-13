@@ -23,7 +23,10 @@ export default new Command({
                 interaction, title: "Nenhum time cadastrado"
             })
 
-        const selectTeamMenu = createSelectTeamMenu({ teamNames: getTeamNamesResponse.value.teamNames })
+        const selectTeamMenu = await createSelectTeamMenu({ teamNames: getTeamNamesResponse.value.teamNames })
+
+        const component = await makeStringSelectMenuComponent(selectTeamMenu)
+
 
         await interaction.editReply({
             content: "Selecione o time:",
