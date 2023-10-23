@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import * as fs from 'fs';
 import path from 'path';
 import { env } from '@/env';
+import { partial_to_full_path } from '../json';
 
 interface FetchDataFromSheetRequest {
     sheet: "inscricao" | "certificado"
@@ -56,10 +57,15 @@ async function fetchDataFromSheet({ sheet }: FetchDataFromSheetRequest) {
     }
 }
 
-export function saveDataToJson(data: any[], fileName: string) {
+export function saveDataToJson(data: any[] | any, fileName: string) {
     try {
+
+        const path = partial_to_full_path({
+            dirname: __dirname, partialPath: "../../../../" + fileName
+        })
+
         const jsonString = JSON.stringify(data, null, 2);
-        fs.writeFileSync(fileName, jsonString, 'utf-8');
+        fs.writeFileSync(path, jsonString, 'utf-8');
         console.log(`Os dados foram salvos em ${fileName}`);
     } catch (error) {
         console.error('Erro ao salvar os dados em JSON:', error);
@@ -120,8 +126,6 @@ export async function parser(inputs: possibleInputs[]) {
 
         return retorno;
     }).filter(retorno => Object.keys(retorno).length > 0);
-
-    // saveDataToJson(retorno_list, 'dados.json');
 
     return retorno_list;
 }

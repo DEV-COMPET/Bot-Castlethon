@@ -4,6 +4,7 @@ import { sucessReply } from "@/bot/utils/discord/editSucessReply";
 import { addMemberToTeamInDB } from "./utils/addMemberToTeamInDB";
 import { teamChosen } from "../selectTeam/variables/teamChosen";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
+import { giveMemberRole } from "./utils/giveMemberRole";
 
 export default new SelectMenu({
     customId,
@@ -18,8 +19,15 @@ export default new SelectMenu({
                 error: addMemberToTeamInDBResponse.value.error, interaction, title: "Erro ao adicionar o membro no tine no DB"
             })
 
-        await sucessReply({ interaction, 
-            title: `Membro ${addMemberToTeamInDBResponse.value.memberName} adicionado ao time ${teamChosen[teamChosen.length - 1]}` 
+        const giveMemberRoleResponse = await giveMemberRole({ interaction, memberDiscordId, roleName: teamChosen[teamChosen.length - 1] })
+        if (giveMemberRoleResponse.isLeft())
+            return errorReply({
+                error: giveMemberRoleResponse.value.error, interaction, title: "Erro ao fornecer o cargo ao membro"
+            })
+
+        await sucessReply({
+            interaction,
+            title: `Membro ${addMemberToTeamInDBResponse.value.memberName} adicionado ao time ${giveMemberRoleResponse.value.roleName}`
         })
     }
 });
