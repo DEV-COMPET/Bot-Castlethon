@@ -7,6 +7,7 @@ import { makeStringSelectMenu, makeStringSelectMenuComponent } from "@/bot/utils
 
 import selectMemberMenuData from "@/bot/selectMenus/createMember/selectMemberMenuData.json"
 import { ComponentType } from "discord.js";
+import { getNotAddedMembers } from "./utils/getNotAddedMembers";
 
 export interface MemberData {
     id: string,
@@ -50,12 +51,29 @@ export default new Command({
             };
         });
 
+        const getNotAddedMembersResponse = await getNotAddedMembers({ membersData })
+        if (getNotAddedMembersResponse.isLeft()) {
+            return await editErrorReply({
+                error: getNotAddedMembersResponse.value.error,
+                interaction,
+                title: "Failed to get not added members."
+            });
+        }
+
+        if(getNotAddedMembersResponse.value.addableMembers.length === 0){
+            return await editErrorReply({
+                error: new Error(),
+                interaction,
+                title: "There are no members to add."
+            });
+        }
+
         const { customId, minMax } = selectMemberMenuData;
 
         const listServerMembersMenu = makeStringSelectMenu({
             customId: customId,
             type: ComponentType.StringSelect,
-            options: membersData.map(memberData => {
+            options: getNotAddedMembersResponse.value.addableMembers.map(memberData => {
 
                 const { id, nickName, username } = memberData;
 

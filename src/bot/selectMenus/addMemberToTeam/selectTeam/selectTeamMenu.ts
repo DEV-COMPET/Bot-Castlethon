@@ -5,6 +5,7 @@ import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { MemberData } from "@/bot/commands/createMember/createMember";
 import { createSelectMemberToBeAddedMenu } from "./utils/createTeamsMenu";
 import { teamChosen } from "./variables/teamChosen";
+import { getAvailableMembers } from "./utils/getAvailableMemberss";
 
 export default new SelectMenu({
     customId,
@@ -37,7 +38,20 @@ export default new SelectMenu({
             };
         });
 
-        const selectMemberToBeAddedMenu = createSelectMemberToBeAddedMenu({ membersData })
+        const availableMembers = await getAvailableMembers({ membersData })
+        if(availableMembers.isLeft()) {
+            return await errorReply({
+                error: availableMembers.value.error, interaction, title: "Erro ao buscar membros disponiveis"
+            });
+        }
+
+        if(availableMembers.value.addableMembers.length === 0) {
+            return await errorReply({
+                error: new Error(), interaction, title: "Nenhum membro disponivel"
+            });
+        }
+
+        const selectMemberToBeAddedMenu = createSelectMemberToBeAddedMenu({ availableMembers: availableMembers.value.addableMembers })
 
         await interaction.reply({
             content: `Time selecionado: ${teamName}\nMembros disponiveis:`,

@@ -5,12 +5,12 @@ import { MemberData } from "@/bot/commands/createMember/createMember";
 import data from "../../selectMember/selectMemberMenuData.json"
 
 interface CreateTeamsMenuRequest {
-    membersData: MemberData[]
+    availableMembers: MemberData[]
 }
 
-export function createSelectMemberToBeAddedMenu({ membersData }: CreateTeamsMenuRequest): StringSelectMenuBuilder {
+export function createSelectMemberToBeAddedMenu({ availableMembers }: CreateTeamsMenuRequest): StringSelectMenuBuilder {
 
-    const options: SelectMenuComponentOptionData[] = membersData.map(member => {
+    const options: SelectMenuComponentOptionData[] = availableMembers.map(member => {
         return {
             label: `${member.username} (${member.nickName})`,
             value: member.id
