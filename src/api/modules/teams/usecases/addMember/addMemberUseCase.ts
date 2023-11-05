@@ -5,8 +5,8 @@ import { ResourceAlreadyExistsError } from "@/api/errors/resourceAlreadyExistsEr
 import { MemberRepository } from "@/api/modules/members/repositories";
 
 interface AddMemberUseCaseRequest {
-	memberDiscordId: string,
-	teamName: string
+  memberDiscordId: string,
+  teamName: string
 }
 
 type AddMemberUseCaseResponse = Either<
@@ -16,7 +16,7 @@ type AddMemberUseCaseResponse = Either<
 
 export class AddMemberUseCase {
   constructor(private repository: InterfaceAddMemberRepository,
-              private membersRepository: MemberRepository) { }
+    private membersRepository: MemberRepository) { }
 
   async execute({ memberDiscordId, teamName }: AddMemberUseCaseRequest): Promise<AddMemberUseCaseResponse> {
 
@@ -29,8 +29,10 @@ export class AddMemberUseCase {
       return left(new ResourceNotFoundError("Member"))
 
     const memberAlreadyAdded = await teamExists.members?.findIndex(member => member.discord_id === memberDiscordId)
-    if(memberAlreadyAdded !== -1)
+    if (memberAlreadyAdded !== -1)
       return left(new ResourceAlreadyExistsError("Member"))
+
+    await this.membersRepository.update(memberExists.name, { ...memberExists, teamName })
 
     teamExists.members?.push(memberExists)
 

@@ -8,7 +8,10 @@ export type MemberData = {
   email?: string,
   role?: string,
   institution?: string,
-  teamId?: string,
+  teamName?: string,
+  discord_id?: string,
+  discord_username?: string
+  discord_nickname?: string
   created_at?: Date
   updated_at?: Date
 };

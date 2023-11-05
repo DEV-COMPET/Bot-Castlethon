@@ -14,7 +14,7 @@ export async function giveMemberRole({ interaction, memberDiscordId, roleName }:
     if (!member)
         return left({ error: new InvalidInputsError("Discord Id") })
 
-    const role = interaction.guild?.roles.cache.find((r) => r.name === roleName);
+    const role = interaction.guild?.roles.cache.find((r) => r.name.toLowerCase() === roleName);
     if (!role)
         return left({ error: new InvalidInputsError("Role Name") })
 

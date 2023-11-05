@@ -13,16 +13,16 @@ export default new SelectMenu({
 
         const memberDiscordId = interaction.values[0]
 
-        const addMemberToTeamInDBResponse = await addMemberToTeamInDB({ memberDiscordId, teamName: teamChosen[teamChosen.length - 1] })
-        if (addMemberToTeamInDBResponse.isLeft())
-            return errorReply({
-                error: addMemberToTeamInDBResponse.value.error, interaction, title: "Erro ao adicionar o membro no tine no DB"
-            })
-
         const giveMemberRoleResponse = await giveMemberRole({ interaction, memberDiscordId, roleName: teamChosen[teamChosen.length - 1] })
         if (giveMemberRoleResponse.isLeft())
             return errorReply({
                 error: giveMemberRoleResponse.value.error, interaction, title: "Erro ao fornecer o cargo ao membro"
+            })
+
+        const addMemberToTeamInDBResponse = await addMemberToTeamInDB({ memberDiscordId, teamName: teamChosen[teamChosen.length - 1] })
+        if (addMemberToTeamInDBResponse.isLeft())
+            return errorReply({
+                error: addMemberToTeamInDBResponse.value.error, interaction, title: "Erro ao adicionar o membro no tine no DB"
             })
 
         await sucessReply({

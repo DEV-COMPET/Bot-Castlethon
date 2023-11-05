@@ -3,12 +3,15 @@ import { z } from 'zod';
 import { makeUpdateMemberUseCase } from './makeUpdateMemberUseCase';
 
 export const updateMemberDataBodySchema = z.object({
-	name: z.string().optional(),
-	profile_picture: z.string().optional(),
-	email: z.string().optional(),
-	role: z.string().optional(),
-	institution: z.string().optional(),
-	teamId: z.string().optional(),
+    name: z.string().optional(),
+    profile_picture: z.string().optional(),
+    email: z.string().optional(),
+    role: z.string().optional(),
+    institution: z.string().optional(),
+    teamName: z.string().optional(),
+    discord_id: z.string().optional(),
+    discord_username: z.string().optional(),
+    discord_nickname: z.string().optional()
 })
 
 const updateMemberNameBodySchema = z.object({

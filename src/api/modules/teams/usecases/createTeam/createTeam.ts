@@ -24,7 +24,7 @@ export async function createTeam(request: FastifyRequest, reply: FastifyReply) {
 
 	const createTeamUseCase = makeCreateTeamUseCase()
 
-	const team = await createTeamUseCase.execute({ institution, members, name, profile_picture });
+	const team = await createTeamUseCase.execute({ institution, members, name: name.toLowerCase(), profile_picture });
 
 	if (team.isLeft()) {
 		return reply
