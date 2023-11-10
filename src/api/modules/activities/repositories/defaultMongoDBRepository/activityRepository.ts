@@ -18,6 +18,26 @@ export class ActivityMongoDBRepository extends DefaultMongoDBRepository<Activity
     super(activityModel);
   }
 
+  public async close(name: string): Promise<ActivityType | undefined> {
+    const activity = await this.activityModel.findOne({ name });
+    if (!activity) {
+      return;
+    }
+    activity.closed_at = new Date();
+    await activity.save();
+    return activity.toJSON() as ActivityType;
+  }
+
+  public async open(name: string): Promise<ActivityType | undefined> {
+    const activity = await this.activityModel.findOne({ name });
+    if (!activity) {
+      return;
+    }
+    activity.opened_at = new Date();
+    await activity.save();
+    return activity.toJSON() as ActivityType;
+  }
+
   public async list(): Promise<ActivityType[]> {
     const activities = this.activityModel.find();
     const result = (await activities).map((activity) => {

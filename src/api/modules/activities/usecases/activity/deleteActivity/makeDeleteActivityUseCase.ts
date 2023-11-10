@@ -1,11 +1,11 @@
-import { MemberMongoDBRepository } from "@/api/modules/members/repositories/defaultMongoDBRepository/memberRepository"
 import { DeleteActivityUseCase } from "./deleteActivityUseCase"
 import { ActivityMongoDBRepository } from "../../../repositories/defaultMongoDBRepository/activityRepository"
+import { AnswerMongoDBRepository } from "../../../repositories/defaultMongoDBRepository/answerRepository"
 
 export function makeDeleteActivityUseCase() {
     const activitysRepository = new ActivityMongoDBRepository()
-    const membersRepository = new MemberMongoDBRepository()
-    const useCase = new DeleteActivityUseCase(activitysRepository, membersRepository)
+    const answerRepository = new AnswerMongoDBRepository()
+    const useCase = new DeleteActivityUseCase(activitysRepository, answerRepository)
 
     return useCase
 }

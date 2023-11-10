@@ -9,12 +9,16 @@ import { getAnswerByName } from '../modules/activities/usecases/answer/getTeamBy
 import { createAnswer } from '../modules/activities/usecases/answer/createActivity/createAnswer';
 import { updateAnswer } from '../modules/activities/usecases/answer/updateTeam/updateTeam';
 import { deleteAnswer } from '../modules/activities/usecases/answer/deleteTeam/deleteActivity';
+import { openActivity } from '../modules/activities/usecases/activity/openActivity/openActivity';
+import { closeActivity } from '../modules/activities/usecases/activity/closeActivity/closeActivity';
 
 export async function activitysRoutes(app: FastifyInstance) {
     app.get('/', listActivity)
     app.get('/:name', getActivityByName)
     app.post('/', createActivity)
     app.put("/:nome", updateActivity)
+    app.put("/open/:name", openActivity)
+    app.put("/close/:name", closeActivity)
     app.delete("/", deleteActivity)
 }
 

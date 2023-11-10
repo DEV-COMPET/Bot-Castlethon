@@ -64,7 +64,9 @@ export class AnswerMongoDBRepository extends DefaultMongoDBRepository<AnswerType
   }
 
   public async deleteByTeamNameActivityName(teamName: string, activityName: string): Promise<AnswerType | undefined> {
+    
     const deletedAnswer = await this.answerModel.findOne({ teamName, activityName });
+
     if (!deletedAnswer) {
       return;
     }
