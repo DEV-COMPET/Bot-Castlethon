@@ -1,10 +1,11 @@
 import { Either, left, right } from "@/api/@types/either";
 import { ResourceNotFoundError } from "@/api/errors/resourceNotFoundError";
-import type { AnswerRepository as InterfaceDeleteAnswerRepository } from "../../../repositories";
+import type { ActivityRepository, AnswerRepository as InterfaceDeleteAnswerRepository } from "../../../repositories";
 import { AnswerType } from "../../../entities/answer.entity";
 
 interface DeleteAnswerUseCaseRequest {
-  name: string;
+  activityName: string
+  teamName: string
 }
 
 type DeleteAnswerUseCaseResponse = Either<
@@ -14,15 +15,23 @@ type DeleteAnswerUseCaseResponse = Either<
 
 export class DeleteAnswerUseCase {
 
-  constructor(private repository: InterfaceDeleteAnswerRepository,
+  constructor(
+    private repository: InterfaceDeleteAnswerRepository,
+    private activityRepository: ActivityRepository
   ) { }
 
-  async execute({ name }: DeleteAnswerUseCaseRequest): Promise<DeleteAnswerUseCaseResponse> {
+  async execute({ activityName, teamName }: DeleteAnswerUseCaseRequest): Promise<DeleteAnswerUseCaseResponse> {
 
-    const deletedAnswer = await this.repository.deleteByName(name);
+    const activity = await this.activityRepository.getByName(activityName);
+    if (!activity)
+      return left(new ResourceNotFoundError(`Activity ${activityName}`));
 
+    activity.answers = activity.answers?.filter((answer) => answer.teamName !== teamName);
+    this.activityRepository.update(activityName, activity);
+
+    const deletedAnswer = await this.repository.deleteByTeamNameActivityName(teamName, activityName);
     if (!deletedAnswer)
-      return left(new ResourceNotFoundError("Answer"));
+      return left(new ResourceNotFoundError(`${teamName}'s answer to ${activityName} activity`));
 
     return right({ deletedAnswer });
   }

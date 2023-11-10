@@ -3,17 +3,18 @@ import { z } from 'zod';
 import { makeDeleteAnswerUseCase } from './makeDeleteTeamUseCase';
 
 export const deleteAnswerBodySchema = z.object({
-	name: z.string(),
+	teamName: z.string(),
+	activityName: z.string()
 });
 
 export async function deleteAnswer(request: FastifyRequest, reply: FastifyReply) {
 
-	const { name } = deleteAnswerBodySchema.parse(request.body);
+	const { activityName, teamName } = deleteAnswerBodySchema.parse(request.body);
 
 	const deleteAnswerUseCase = makeDeleteAnswerUseCase()
 
 	const answer = await deleteAnswerUseCase.execute({
-		name
+		activityName, teamName
 	});
 
 	if (answer.isLeft()) {

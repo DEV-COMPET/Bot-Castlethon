@@ -6,15 +6,16 @@ export const createAnswerBodySchema = z.object({
 	teamName: z.string(),
 	answerText: z.string().optional(),
 	answerDir: z.string().optional(),
+	activityName: z.string()
 });
 
 export async function createAnswer(request: FastifyRequest, reply: FastifyReply) {
 
-	const { teamName, answerDir, answerText } = createAnswerBodySchema.parse(request.body);
+	const { teamName, answerDir, answerText, activityName } = createAnswerBodySchema.parse(request.body);
 
 	const createAnswerUseCase = makeCreateAnswerUseCase()
 
-	const answer = await createAnswerUseCase.execute({ teamName, answerDir, answerText });
+	const answer = await createAnswerUseCase.execute({ teamName, answerDir, answerText, activityName });
 
 	if (answer.isLeft()) {
 		return reply

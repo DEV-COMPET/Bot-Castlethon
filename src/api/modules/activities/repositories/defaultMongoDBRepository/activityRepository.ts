@@ -1,13 +1,13 @@
 import { DefaultMongoDBRepository } from ".";
 import { ActivityModel, ActivityType, Activity } from "../../entities/activity.entity";
 import { ActivityRepository as InterfaceActivityRepository } from "..";
-import { AnswerData } from "./answerRepository";
+import { AnswerType } from "../../entities/answer.entity";
 
 export type ActivityData = {
   name?: string,
   description?: string,
   descriptionFileDir?: string,
-  answers?: AnswerData[],
+  answers?: AnswerType[],
   created_at?: Date
   updated_at?: Date
 };

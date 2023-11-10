@@ -14,4 +14,6 @@ export type WithId<T> = { id: string } & T;
 
 export type ActivityRepository = Repository<ActivityType> & { update: (nome: string, updatedData: ActivityData) => Promise<ActivityType | undefined> };
 
-export type AnswerRepository = Repository<AnswerType> & { update: (nome: string, updatedData: AnswerData) => Promise<AnswerType | undefined> };
+export type AnswerRepository = Repository<AnswerType> & { update: (nome: string, updatedData: AnswerData) => Promise<AnswerType | undefined> }
+	& { getByTeamNameActivityName: (teamName: string, activityName: string) => Promise<AnswerType | undefined> }
+	& { deleteByTeamNameActivityName: (teamName: string, activityName: string) => Promise<AnswerType | undefined> };

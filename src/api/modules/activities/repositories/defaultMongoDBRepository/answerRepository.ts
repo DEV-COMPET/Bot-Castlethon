@@ -23,11 +23,18 @@ export class AnswerMongoDBRepository extends DefaultMongoDBRepository<AnswerType
       return result;
     });
     return result;
-  }answerExists
+  }
 
-  public async getByName(name: string): Promise<AnswerType | undefined> {
+  public async getByName(teamName: string): Promise<AnswerType | undefined> {
     
-    const answer = await this.answerModel.findOne({ name });
+    const answer = await this.answerModel.findOne({ teamName });
+    const result: AnswerType | undefined = answer?.toJSON();
+    return result;
+  }
+
+  public async getByTeamNameActivityName(teamName: string, activityName: string): Promise<AnswerType | undefined> {
+    
+    const answer = await this.answerModel.findOne({ teamName, activityName });
     const result: AnswerType | undefined = answer?.toJSON();
     return result;
   }
@@ -55,6 +62,16 @@ export class AnswerMongoDBRepository extends DefaultMongoDBRepository<AnswerType
     await deletedAnswer.deleteOne();
     return deletedAnswer.toJSON<AnswerType>();
   }
+
+  public async deleteByTeamNameActivityName(teamName: string, activityName: string): Promise<AnswerType | undefined> {
+    const deletedAnswer = await this.answerModel.findOne({ teamName, activityName });
+    if (!deletedAnswer) {
+      return;
+    }
+    await deletedAnswer.deleteOne();
+    return deletedAnswer.toJSON<AnswerType>();
+  }
+  
 
   public async update(nome: string, data: AnswerData): Promise<AnswerType | undefined> {
     const updatedAnswer = await this.answerModel.findOneAndUpdate(

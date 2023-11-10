@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 
 export type AnswerType = {
     teamName: string,
+    activityName: string,
     answerText?: string,
     answerDir?: string,
     created_at?: Date
@@ -17,6 +18,7 @@ export class Answer extends Entity<AnswerType> implements AnswerType {
     }
 
     get teamName() { return this.props.teamName }
+    get activityName() { return this.props.activityName }
     get answerText() { return this.props.answerText }
     get answerDir() { return this.props.answerDir }
     get created_at() { return this.props.created_at }
@@ -27,10 +29,11 @@ export class Answer extends Entity<AnswerType> implements AnswerType {
 export const answerSchema = new mongoose.Schema<AnswerType>(
     {
         teamName: { type: String, required: true },
+        activityName: { type: String, required: true },
         answerText: { type: String, required: false },
         answerDir: { type: String, required: false },
-        created_at: { type: Date, required: true },
-        updated_at: { type: Date, required: true },
+        created_at: { type: Date, required: false },
+        updated_at: { type: Date, required: false },
     },
     {
         versionKey: false,
