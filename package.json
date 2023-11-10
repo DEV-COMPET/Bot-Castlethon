@@ -29,6 +29,7 @@
   "author": "Compet",
   "license": "MIT",
   "dependencies": {
+    "@types/mime-types": "^2.1.4",
     "@types/nodemailer": "^6.4.10",
     "@types/uuid": "^9.0.4",
     "blob-util": "^2.0.2",
@@ -39,6 +40,7 @@
     "fastify": "^4.22.2",
     "glob": "^10.3.4",
     "googleapis": "^126.0.1",
+    "mime-types": "^2.1.35",
     "mongoose": "^7.5.0",
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.9.5",
