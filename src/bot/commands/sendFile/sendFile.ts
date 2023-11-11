@@ -1,11 +1,10 @@
 import { Command } from "@/bot/structures/Command";
 import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
 import { description, name } from "./sendFileData.json";
-import { editSucessReply } from "@/bot/utils/discord/editSucessReply";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
-import { uploadMetaToFolder } from "@/bot/utils/googleAPI/googleDrive/uploadMetaToFolder";
-import { getLastResponseMeta } from "./utils/getLastResponseMeta";
-import { saveAnswerOnDB } from "./utils/saveAnswerOnDB";
+import { listAvailableActivities } from "./utils/listAvailableActivities";
+import { createListAvailableActivitiesMenu } from "./utils/createListAvailableActivitiesMenu";
+import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 
 export default new Command({
     name,
@@ -20,34 +19,18 @@ export default new Command({
             return isNotAdmin.value.response;
         }
 
-        const getLastResponseMetaResponse = await getLastResponseMeta({ interaction, refferenceMessageId: "1172268770824298568" })
-        if (getLastResponseMetaResponse.isLeft())
+        const listAvailableActivitiesResponse = await listAvailableActivities();
+        if (listAvailableActivitiesResponse.isLeft())
             return await editErrorReply({
-                error: getLastResponseMetaResponse.value.error,
-                interaction, title: "Erro ao pegar os arquivos do discord."
+                error: listAvailableActivitiesResponse.value.error,
+                interaction, title: "Erro ao pegar as atividades."
             })
 
-        const { media, fileName } = getLastResponseMetaResponse.value;
-        const uploadToFolderResponse = await uploadMetaToFolder({ media, fileName });
-        if (uploadToFolderResponse.isLeft()) {
-            return await editErrorReply({
-                error: uploadToFolderResponse.value.error,
-                interaction, title: "Erro ao upar os arquivos no drive."
-            })
-        }
+        const listAvailableActivitiesMenu = await createListAvailableActivitiesMenu({ activitieNames: listAvailableActivitiesResponse.value.availableActivities });
 
-        const saveAnswerOnDBResponse = await saveAnswerOnDB({
-            activityName: "Atividade 1", teamName: "team1",
-        });
-        if(saveAnswerOnDBResponse.isLeft()) 
-            return await editErrorReply({
-                error: saveAnswerOnDBResponse.value.error,
-                interaction, title: "Erro ao salvar a resposta no banco de dados."
-            })
-        
-
-        await editSucessReply({
-            interaction, title: "Arquivo enviado com sucesso!"
+        return await interaction.editReply({
+            content: "Selecione a atividade:",
+            components: [await makeStringSelectMenuComponent(listAvailableActivitiesMenu)],
         });
     },
 });

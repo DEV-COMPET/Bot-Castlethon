@@ -1,6 +1,6 @@
 import { Either, left, right } from "@/api/@types/either";
 import { DiscordError } from "@/bot/errors/discordError";
-import { ExtendedInteraction } from "@/bot/typings/Commands";
+import { ExtendedStringSelectMenuInteraction } from "@/bot/typings/SelectMenu";
 import axios from 'axios';
 import mime from 'mime-types';
 
@@ -10,7 +10,7 @@ type GetLastResponseMetaResponse = Either<
 >
 
 interface GetLastResponseMetaRequest {
-    interaction: ExtendedInteraction,
+    interaction: ExtendedStringSelectMenuInteraction,
     refferenceMessageId: string
 }
 
@@ -43,7 +43,7 @@ export async function getLastResponseMeta({ interaction, refferenceMessageId }: 
     const authorId = lastMessage.author.id;
     const authorRole = interaction.guild?.members.cache.get(authorId)?.roles.highest.name;
 
-    return right({ media: media, fileName: attachment.name, teamName: authorRole || "Sem time" })
+    return right({ media: media, fileName: attachment.name, teamName: authorRole?.toLocaleLowerCase() || "Sem time" })
 }
 
 /*

@@ -26,7 +26,7 @@ export async function uploadMetaToFolder({ media, fileName }: UploadMetaToFolder
 
     const folderId = "12kwuE0lalYPWzcE6gCyYg0fTdXoT33eh"
     const fileMetadata = {
-        fileName,
+        name: fileName,
         parents: [folderId],
     };
 
