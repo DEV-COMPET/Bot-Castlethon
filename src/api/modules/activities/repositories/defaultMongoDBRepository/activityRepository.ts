@@ -1,5 +1,5 @@
 import { DefaultMongoDBRepository } from ".";
-import { ActivityModel, ActivityType, Activity } from "../../entities/activity.entity";
+import { ActivityModel, ActivityType, Activity, ActivityMessage } from "../../entities/activity.entity";
 import { ActivityRepository as InterfaceActivityRepository } from "..";
 import { AnswerType } from "../../entities/answer.entity";
 
@@ -7,6 +7,9 @@ export type ActivityData = {
   name?: string,
   description?: string,
   descriptionFileDir?: string,
+  chatMessagesIds?: ActivityMessage[], // ids das mensagens de envio de tarefas (para pessoas receberem tarefa)
+  opened_at?: Date | null,
+  closed_at?: Date | null,
   answers?: AnswerType[],
   created_at?: Date
   updated_at?: Date

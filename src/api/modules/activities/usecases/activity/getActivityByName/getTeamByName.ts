@@ -20,5 +20,5 @@ export async function getActivityByName(request: FastifyRequest, reply: FastifyR
 			.send({ message: "Membro não encontrado", error_message: activity.value.message })
 	}
 
-	return reply.status(201).send({ updated_activity: activity.value.activity });
+	return reply.status(201).send(activity.value.activity);
 }

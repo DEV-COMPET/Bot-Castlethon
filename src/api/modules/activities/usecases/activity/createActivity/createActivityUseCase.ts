@@ -24,7 +24,7 @@ export class CreateActivityUseCase {
     if (activityExists)
       return left(new ResourceAlreadyExistsError("Activity"))
 
-    const activity = new Activity({ name, description, descriptionFileDir, closed_at: null, opened_at: null });
+    const activity = new Activity({ name, description, descriptionFileDir, closed_at: null, opened_at: null, chatMessagesIds: [] });
 
     await this.repository.create(activity);
 

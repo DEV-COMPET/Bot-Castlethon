@@ -11,6 +11,7 @@ import { updateAnswer } from '../modules/activities/usecases/answer/updateTeam/u
 import { deleteAnswer } from '../modules/activities/usecases/answer/deleteTeam/deleteActivity';
 import { openActivity } from '../modules/activities/usecases/activity/openActivity/openActivity';
 import { closeActivity } from '../modules/activities/usecases/activity/closeActivity/closeActivity';
+import { addActivityMessage } from '../modules/activities/usecases/activity/addActivityMessage/addActivityMessage';
 
 export async function activitysRoutes(app: FastifyInstance) {
     app.get('/', listActivity)
@@ -19,6 +20,7 @@ export async function activitysRoutes(app: FastifyInstance) {
     app.put("/:nome", updateActivity)
     app.put("/open/:name", openActivity)
     app.put("/close/:name", closeActivity)
+    app.put("/messages", addActivityMessage)
     app.delete("/", deleteActivity)
 }
 
