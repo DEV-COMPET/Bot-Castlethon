@@ -23,9 +23,7 @@ export class AddActivityMessageUseCase {
     if (!activityExists)
       return left(new ResourceNotFoundError("Activity"))
 
-    messagesData.forEach(async (messageData) => {
-      activityExists.chatMessagesIds.push(messageData)
-    })
+    activityExists.chatMessagesIds = messagesData
 
     await this.repository.update(activityName, activityExists)
 
