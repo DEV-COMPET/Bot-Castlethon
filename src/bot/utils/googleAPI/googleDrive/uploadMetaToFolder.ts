@@ -12,9 +12,10 @@ type UploadMetaToFolderResponse = Either<
 interface UploadMetaToFolderRequest {
     media: any,
     fileName: string
+    folderIdP?: string | undefined
 }
 
-export async function uploadMetaToFolder({ media, fileName }: UploadMetaToFolderRequest): Promise<UploadMetaToFolderResponse> {
+export async function uploadMetaToFolder({ media, fileName, folderIdP }: UploadMetaToFolderRequest): Promise<UploadMetaToFolderResponse> {
     const auth = new google.auth.GoogleAuth({
         keyFile: partial_to_full_path({
             dirname: __dirname,
@@ -24,7 +25,7 @@ export async function uploadMetaToFolder({ media, fileName }: UploadMetaToFolder
     });
     const service = google.drive({ version: 'v3', auth });
 
-    const folderId = "12kwuE0lalYPWzcE6gCyYg0fTdXoT33eh"
+    const folderId = folderIdP ? folderIdP : "12kwuE0lalYPWzcE6gCyYg0fTdXoT33eh"
     const fileMetadata = {
         name: fileName,
         parents: [folderId],
