@@ -1,6 +1,6 @@
 import { Command } from "@/bot/structures/Command";
 import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
-import { description, name } from "./sendFileData.json";
+import { description, name } from "./recieveActivitiesAnswersData.json";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { listAvailableActivities } from "./utils/listAvailableActivities";
 import { createListAvailableActivitiesMenu } from "./utils/createListAvailableActivitiesMenu";
