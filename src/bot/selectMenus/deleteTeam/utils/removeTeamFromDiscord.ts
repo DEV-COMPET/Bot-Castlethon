@@ -1,5 +1,5 @@
 import { Either, left, right } from "@/api/@types/either";
-import { RoleData } from "@/bot/commands/deleteTeam/utils/getTeamNamesInDiscordRoles";
+import { RoleData } from "@/bot/commands/team/deleteTeam/utils/getTeamNamesInDiscordRoles";
 import { DiscordError } from "@/bot/errors/discordError";
 import { ExtendedStringSelectMenuInteraction } from "@/bot/typings/SelectMenu";
 import { ChannelType } from "discord.js";

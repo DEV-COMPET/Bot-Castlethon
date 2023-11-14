@@ -2,7 +2,7 @@ import { SelectMenu } from "@/bot/structures/SelectMenu";
 import { customId } from "./selectTeamMenuData.json"
 import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
-import { MemberData } from "@/bot/commands/createMember/createMember";
+import { MemberData } from "@/bot/commands/member/createMember/createMember";
 import { createSelectMemberToBeAddedMenu } from "./utils/createTeamsMenu";
 import { teamChosen } from "./variables/teamChosen";
 import { getAvailableMembers } from "./utils/getAvailableMemberss";
@@ -39,13 +39,13 @@ export default new SelectMenu({
         });
 
         const availableMembers = await getAvailableMembers({ membersData })
-        if(availableMembers.isLeft()) {
+        if (availableMembers.isLeft()) {
             return await errorReply({
                 error: availableMembers.value.error, interaction, title: "Erro ao buscar membros disponiveis"
             });
         }
 
-        if(availableMembers.value.addableMembers.length === 0) {
+        if (availableMembers.value.addableMembers.length === 0) {
             return await errorReply({
                 error: new Error(), interaction, title: "Nenhum membro disponivel"
             });

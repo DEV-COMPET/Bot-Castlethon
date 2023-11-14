@@ -1,7 +1,7 @@
 import { TextInputComponentData } from "discord.js";
 import { Modal } from "@/bot/structures/Modals";
 import { makeModal } from "@/bot/utils/modal/makeModal"
-import commandData from "@/bot/commands/createTeam/createTeamData.json"
+import commandData from "@/bot/commands/team/createTeam/createTeamData.json"
 import modalData from "./createTeamInputs.json"
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { sucessReply } from "@/bot/utils/discord/editSucessReply";

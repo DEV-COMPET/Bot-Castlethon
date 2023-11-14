@@ -2,11 +2,11 @@ import { SelectMenu } from "@/bot/structures/SelectMenu";
 import { customId } from './listActivitiesToSendActivityMenuData.json'
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { editSucessReply } from "@/bot/utils/discord/editSucessReply";
-import { getTeamsTextChannels } from "@/bot/commands/announceActivity/utils/getTeamsTextChannels";
 import { ChannelType } from "discord.js";
 import { makeSuccessEmbed } from "@/bot/utils/embed/makeSuccessEmbed";
 import { ActivityMessage, ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { getTeamsTextChannels } from "@/bot/commands/activity/announceActivity/utils/getTeamsTextChannels";
 
 export default new SelectMenu({
     customId: customId,

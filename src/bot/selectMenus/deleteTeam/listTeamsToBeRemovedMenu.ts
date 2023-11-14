@@ -1,7 +1,7 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
 import { customId } from "./deleteTeamMenuData.json"
-import { teamsRemovableData } from "@/bot/commands/deleteTeam/variables/teamdRemovableData";
-import { removeTeamFromDB } from "@/bot/commands/deleteTeam/utils/removeTeamInDB";
+import { teamsRemovableData } from "@/bot/commands/team/deleteTeam/variables/teamdRemovableData";
+import { removeTeamFromDB } from "@/bot/commands/team/deleteTeam/utils/removeTeamInDB";
 import { removeTeamFromDiscord } from "./utils/removeTeamFromDiscord";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { sucessReply } from "@/bot/utils/discord/editSucessReply";

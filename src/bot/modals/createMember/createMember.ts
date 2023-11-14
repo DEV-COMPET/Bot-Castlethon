@@ -1,7 +1,7 @@
 import { ComponentType, TextInputComponentData, TextInputStyle } from "discord.js";
 import { Modal } from "@/bot/structures/Modals";
 import { makeModal } from "@/bot/utils/modal/makeModal"
-import commandData from "@/bot/commands/createMember/createMemberData.json"
+import commandData from "@/bot/commands/member/createMember/createMemberData.json"
 import modalData from "./createMemberInputs.json"
 import { extractInputData } from "./utils/extractInputData";
 import { addMemberToDB } from "./utils/addMemberToDB";
@@ -41,7 +41,7 @@ export default new Modal({
 
         const addMemberToDBReponse = await addMemberToDB({
             discord_id: id, discord_username: username, discord_nickname: nickName,
-            inputData: { email, institution, name: name || discordName}
+            inputData: { email, institution, name: name || discordName }
         })
         if (addMemberToDBReponse.isLeft())
             return await errorReply({

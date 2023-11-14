@@ -2,7 +2,7 @@ import { Either, left, right } from "@/api/@types/either";
 import { FetchReponseError } from "@/bot/errors/fetchReponseError";
 import { createURL } from "@/bot/utils/fetch/url";
 import { MemberType } from "@/api/modules/members/entities/member.entity";
-import { MemberData } from "@/bot/commands/createMember/createMember";
+import { MemberData } from "@/bot/commands/member/createMember/createMember";
 
 interface GetAvailableMembersRequest {
     membersData: MemberData[]

@@ -1,6 +1,6 @@
 import { ComponentType, SelectMenuComponentOptionData, StringSelectMenuBuilder } from "discord.js";
 import { makeStringSelectMenu } from "@/bot/utils/modal/makeSelectMenu";
-import { MemberData } from "@/bot/commands/createMember/createMember";
+import { MemberData } from "@/bot/commands/member/createMember/createMember";
 
 import data from "../../selectMember/selectMemberMenuData.json"
 
