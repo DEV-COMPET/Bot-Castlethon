@@ -1,0 +1,20 @@
+{
+    "inputFields": [
+        {
+            "label": "Nome da atividade",
+            "placeholder": "IA: como funciona?",
+            "customId": "name",
+            "required": true,
+            "style": 1,
+            "type": 4
+        }, 
+        {
+            "label": "Insira uma descrição",
+            "placeholder": "Esssa atividade fala sobre...",
+            "customId": "description",
+            "required": false,
+            "style": 1,
+            "type": 4
+        }
+    ]
+}

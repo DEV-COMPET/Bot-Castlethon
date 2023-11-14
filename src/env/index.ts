@@ -11,7 +11,8 @@ const envSchema = z.object({
     HOST: z.string().default("http://localhost:4444"),
     MONGODB_USER: z.string().optional(),
     MONGODB_PASSWORD: z.string().optional(),
-    PORT: z.coerce.number().default(4444)
+    PORT: z.coerce.number().default(4444),
+    DRIVE_ACTIVITIES_FOLDER_ID: z.string(),
 });
 
 const _env = envSchema.safeParse(process.env); // tenta validar process.env para ver se tem as exatas informações dentro
