@@ -21,28 +21,19 @@ export class DeleteTeamUseCase {
 
   async execute({ name }: DeleteTeamUseCaseRequest): Promise<DeleteTeamUseCaseResponse> {
 
-    console.log("aaaaaaa")
-
     const team = await this.repository.getByName(name);
-    
-    console.dir({
-      team, name
-    })
     
     if (!team)
       return left(new ResourceNotFoundError("Team"));
 
-      console.log("aaaaaaa")
     const memberNames = team.members?.map(member => member.name);
     if (memberNames) {
 
-      console.log("aaaaaaa")
       memberNames.forEach(async (memberName) => {
         const member = await this.membersRepository.getByName(memberName);
         if (member) {
           const updatedMember = { ...member, teamName: "" };
 
-          console.log("aaaaaaa")
           await this.membersRepository.update(memberName, updatedMember);
         }
       })
