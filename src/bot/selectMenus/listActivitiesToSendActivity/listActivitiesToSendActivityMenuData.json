@@ -1,0 +1,7 @@
+{
+    "customId": "list-activities-to-send-activity",
+    "minMax": {
+        "min": 1,
+        "max": 1
+    }
+}
