@@ -1,4 +1,4 @@
 {
-    "name": "recieve-activity-answer",
-    "description": "Cria um novo time no banco de dados"  
+    "name": "recieve-activity-answers",
+    "description": "Remove a atividade do banco de dados"  
 }

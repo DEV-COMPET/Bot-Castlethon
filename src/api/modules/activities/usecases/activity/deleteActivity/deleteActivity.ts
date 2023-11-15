@@ -22,5 +22,5 @@ export async function deleteActivity(request: FastifyRequest, reply: FastifyRepl
 			.send({ error_message: activity.value.message })
 	}
 
-	return reply.status(201).send({ deleted_activity: activity.value.deletedActivity });
+	return reply.status(201).send(activity.value.deletedActivity);
 }

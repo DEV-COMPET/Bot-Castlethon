@@ -18,9 +18,7 @@ export async function copyFromDriveLinkToDriveLink({ originLink, destinLink }: C
 
     const regex = /(?<=folders\/)[^? \n\r\t]*/;
 
-    const destinId = regex.exec(destinLink)?.[0]
-    if (!destinId)
-        return left({ error: new Error("Link de destino inválido") })
+    const destinId = destinLink
 
     const originId = regex.exec(originLink)?.[0]
     if (!originId)

@@ -5,6 +5,8 @@ import { DiscordError } from "@/bot/errors/discordError";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { ExtendedStringSelectMenuInteraction } from "@/bot/typings/SelectMenu";
 import { Either, left, right } from "@/api/@types/either";
+import { createFolder } from "@/bot/utils/googleAPI/googleDrive/createFolder";
+import { copyFromDriveLinkToDriveLink } from "@/bot/utils/googleAPI/googleDrive/copyFromDriveLinkToDriveLink";
 
 interface GetAndSaveAnswersRequest {
     activity: ActivityType
@@ -47,6 +49,26 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
 
                 const { link } = answer.data as DriveResponse;
 
+                const createFolderResponse = await createFolder({ folderName: teamName, parentFolderId: activity.descriptionFileDir as string });
+                if (createFolderResponse.isLeft()) {
+                    return left({
+                        error: createFolderResponse.value.error
+                    })
+                }
+
+                console.dir({
+                    destinLink: createFolderResponse.value.folderId, originLink: link
+                
+                })
+
+                const copyFromDriveLinkToDriveLinkResponse = await copyFromDriveLinkToDriveLink({
+                    destinLink: createFolderResponse.value.folderId, originLink: link
+                })
+                if (copyFromDriveLinkToDriveLinkResponse.isLeft()) {
+                    return left({
+                        error: copyFromDriveLinkToDriveLinkResponse.value.error
+                    })
+                }
                 // await downloadFromFolderLink(link)
 
                 answerStatus.push({ teamName, type: "DRIVE" })
@@ -56,7 +78,14 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
 
                 const { fileName, media } = answer.data as FileResponse;
 
-                const uploadToFolderResponse = await uploadMetaToFolder({ fileName, media });
+                const createFolderResponseFile = await createFolder({ folderName: teamName, parentFolderId: activity.descriptionFileDir as string });
+                if (createFolderResponseFile.isLeft()) {
+                    return left({
+                        error: createFolderResponseFile.value.error
+                    })
+                }
+
+                const uploadToFolderResponse = await uploadMetaToFolder({ fileName, media, folderIdP: createFolderResponseFile.value.folderId });
                 if (uploadToFolderResponse.isLeft()) {
                     return left({
                         error: uploadToFolderResponse.value.error
