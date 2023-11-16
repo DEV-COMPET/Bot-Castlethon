@@ -3,10 +3,8 @@ import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { description, name } from "./deleteTeamInfo.json"
 import { getRemovableTeamsName } from "./utils/getRemovableTeamsName";
-import { makeStringSelectMenu, makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
-
-import { customId, minMax } from "@/bot/selectMenus/deleteTeam/deleteTeamMenuData.json"
-import { ComponentType } from "discord.js";
+import { menuAddOption } from "@/bot/utils/discord/makeSelectMenu";
+import { listTeamsToBeRemovedMenu } from "@/bot/selectMenus/deleteTeam/listTeamsToBeRemovedMenu";
 
 export default new Command({
     name, description,
@@ -25,22 +23,21 @@ export default new Command({
                 interaction, title: "Nenhum time está cadastrado no DB e no discord."
             })
 
-        const listTeamsToBeRemovedMenu = makeStringSelectMenu({
-            customId: customId,
-            type: ComponentType.StringSelect,
-            options: getRemovableTeamsNamesResponse.value.teamNames.map(name => {
-                return {
-                    label: name,
-                    value: name
-                }
-            }),
-            maxValues: minMax.max,
-            minValues: minMax.min
-        });
+        const copyMenu = listTeamsToBeRemovedMenu
+        const menu = menuAddOption({
+            menu: copyMenu, optionData: getRemovableTeamsNamesResponse.value.teamNames.map((name, index) => {
+                return { label: name, value: `team-${index}` }
+            })
+        })
+        if (menu.isLeft())
+            return await editErrorReply({
+                error: menu.value.error, interaction,
+                title: menu.value.error.message
+            })
 
-        await interaction.editReply({
+        return await interaction.editReply({
             content: "Times Disponíveis:",
-            components: [await makeStringSelectMenuComponent(listTeamsToBeRemovedMenu)],
+            components: [menu.value.menu],
         });
     },
 });

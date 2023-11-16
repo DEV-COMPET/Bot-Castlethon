@@ -1,10 +1,15 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
-import { customId } from "@/bot/selectMenus/addMemberToTeam/selectMember/selectMemberMenuData.json"
+import { customId, minMax } from "@/bot/selectMenus/addMemberToTeam/selectMember/selectMemberMenuData.json"
 import { sucessReply } from "@/bot/utils/discord/editSucessReply";
 import { teamChosen } from "../selectTeam/variables/teamChosen";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { giveMemberRole } from "./utils/giveMemberRole";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { makeSelectMenu } from "@/bot/utils/discord/makeSelectMenu";
+
+export const selectMemberToBeAddedMenu = makeSelectMenu({
+    customId, max: minMax.max, min: minMax.min
+})
 
 export default new SelectMenu({
     customId,

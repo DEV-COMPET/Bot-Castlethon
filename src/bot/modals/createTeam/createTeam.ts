@@ -50,7 +50,7 @@ export default new Modal({
                 interaction, title: "Não foi possivel criar os chats do time"
             })
 
-        await sucessReply({
+        return await sucessReply({
             interaction, title: "Time criado com Sucesso!!",
             fields: [
                 { name: "Nome", value: name, inline: true },

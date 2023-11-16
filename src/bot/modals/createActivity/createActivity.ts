@@ -35,7 +35,7 @@ export default new Modal({
             })
 
         const addActivityToDBReponse = await fetchDataFromAPI({ 
-            json: true, method: "POST", url: "/activity", 
+            json: true, method: "POST", url: "/activity/", 
             bodyData: { name, description, descriptionFileDir: createActivitysFolderInDriveResponse.value.folderId }
         })
         if (addActivityToDBReponse.isLeft())

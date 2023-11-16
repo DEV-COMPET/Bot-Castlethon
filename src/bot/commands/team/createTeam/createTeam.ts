@@ -3,14 +3,11 @@ import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
 import { description, name } from "./createTeamData.json";
 import { getAllRolesColors } from "./utils/getAllRolesColors";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
-import { makeStringSelectMenu, makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
-import { ComponentType } from "discord.js";
-
-import selectColorMenuData from "@/bot/selectMenus/createTeam/selectTeamColorMenuData.json"
+import { menuAddOption } from "@/bot/utils/discord/makeSelectMenu";
+import { selectTeamColorMenu } from "@/bot/selectMenus/createTeam/selectTeamColorMenu";
 
 export default new Command({
-    name,
-    description,
+    name, description,
     run: async function ({ interaction }) {
 
         await interaction.deferReply({ ephemeral: true });
@@ -27,24 +24,24 @@ export default new Command({
                 title: getAllRolesColorsResponse.value.error.message
             });
 
-        const { customId, minMax } = selectColorMenuData
-
-        const listRoleColorsMenu = makeStringSelectMenu({
-            customId: customId,
-            type: ComponentType.StringSelect,
-            options: getAllRolesColorsResponse.value.colors.map(color => { 
-                return { 
-                    label: color.name, 
+        const copyMenu = selectTeamColorMenu
+        const menu = menuAddOption({
+            menu: copyMenu, optionData: getAllRolesColorsResponse.value.colors.map(color => {
+                return {
+                    label: color.name,
                     value: color.name
                 }
             }),
-            maxValues: minMax.max,
-            minValues: minMax.min
-        });
+        })
+        if (menu.isLeft())
+            return await editErrorReply({
+                error: menu.value.error, interaction,
+                title: menu.value.error.message
+            });
 
-        await interaction.editReply({
+        return await interaction.editReply({
             content: "Cores Disponíveis:",
-            components: [await makeStringSelectMenuComponent(listRoleColorsMenu)],
+            components: [menu.value.menu],
         });
     },
 });

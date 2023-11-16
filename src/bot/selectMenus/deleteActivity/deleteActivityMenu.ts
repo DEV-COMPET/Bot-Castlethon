@@ -1,10 +1,15 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
-import { customId } from './deleteActivityMenuData.json'
+import { customId, minMax } from './deleteActivityMenuData.json'
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { editSucessReply } from "@/bot/utils/discord/editSucessReply";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { deleteActivityFolder } from "@/bot/utils/googleAPI/googleDrive/deleteFolder";
+import { makeSelectMenu } from "@/bot/utils/discord/makeSelectMenu";
+
+export const deleteActivityMenu = makeSelectMenu({
+    customId, max: minMax.max, min: minMax.min,
+})
 
 export default new SelectMenu({
     customId: customId,
@@ -25,8 +30,6 @@ export default new SelectMenu({
             })
 
         const activity = fetchActivity.value.responseData as ActivityType
-
-        console.dir({ activity })
 
         const deleteActivityFolderInDriveResponse = await deleteActivityFolder({ id: activity.descriptionFileDir as string })
         if (deleteActivityFolderInDriveResponse.isLeft())

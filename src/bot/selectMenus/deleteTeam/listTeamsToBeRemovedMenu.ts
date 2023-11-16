@@ -1,15 +1,22 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
-import { customId } from "./deleteTeamMenuData.json"
+import { customId, minMax } from "./deleteTeamMenuData.json"
 import { teamsRemovableData } from "@/bot/commands/team/deleteTeam/variables/teamdRemovableData";
 import { removeTeamFromDiscord } from "./utils/removeTeamFromDiscord";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
-import { sucessReply } from "@/bot/utils/discord/editSucessReply";
+import { editSucessReply, sucessReply } from "@/bot/utils/discord/editSucessReply";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { makeSelectMenu } from "@/bot/utils/discord/makeSelectMenu";
+
+export const listTeamsToBeRemovedMenu = makeSelectMenu({
+    customId, max: minMax.max, min: minMax.min,
+})
 
 export default new SelectMenu({
     customId: customId,
 
     run: async ({ interaction }) => {
+
+        await interaction.deferReply({ ephemeral: true });
 
         const selectedTeamName = interaction.values[0] as string
 
@@ -42,7 +49,7 @@ export default new SelectMenu({
                 })
         }
 
-        return await sucessReply({
+        return await editSucessReply({
             interaction, title: `Suceso ao remover o time "${possibleDBName ?? possibleRoleData?.name}"`
         })
     }

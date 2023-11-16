@@ -1,5 +1,5 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
-import { customId } from './listActivitiesToSendActivityMenuData.json'
+import { customId, minMax } from './listActivitiesToSendActivityMenuData.json'
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { editSucessReply } from "@/bot/utils/discord/editSucessReply";
 import { ChannelType } from "discord.js";
@@ -7,6 +7,11 @@ import { makeSuccessEmbed } from "@/bot/utils/embed/makeSuccessEmbed";
 import { ActivityMessage, ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { TeamType } from "@/api/modules/teams/entities/team.entity";
+import { makeSelectMenu } from "@/bot/utils/discord/makeSelectMenu";
+
+export const listActivitiesToSendActivityMenu = makeSelectMenu({
+    customId, max: minMax.max, min: minMax.min,
+})
 
 export default new SelectMenu({
     customId: customId,

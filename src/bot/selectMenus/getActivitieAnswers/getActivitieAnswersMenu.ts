@@ -1,10 +1,15 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
-import { customId } from './getActivitieAnswersMenuData.json'
+import { customId, minMax } from './getActivitieAnswersMenuData.json'
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { editSucessReply } from "@/bot/utils/discord/editSucessReply";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { getAndSaveAnswers } from "./utils/getAndSaveAnswers";
+import { makeSelectMenu } from "@/bot/utils/discord/makeSelectMenu";
+
+export const getActivitieAnswersMenu = makeSelectMenu({
+    customId, max: minMax.max, min: minMax.min,
+})
 
 export default new SelectMenu({
     customId: customId,

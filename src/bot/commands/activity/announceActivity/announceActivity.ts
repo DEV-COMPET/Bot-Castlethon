@@ -2,10 +2,10 @@ import { Command } from "@/bot/structures/Command";
 import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
 import { description, name } from "./announceActivityData.json";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
-import { createListAvailableActivitiesMenu } from "./utils/createListAvailableActivitiesMenu";
-import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
+import { menuAddOption } from "@/bot/utils/discord/makeSelectMenu";
+import { listActivitiesToSendActivityMenu } from "@/bot/selectMenus/listActivitiesToSendActivity/listActivitiesToSendActivityMenu";
 
 export default new Command({
     name,
@@ -41,11 +41,22 @@ export default new Command({
                 interaction, title: "Nenhuma atividade disponivel.", error: new Error("Nenhuma atividade disponivel.")
             })
 
-        const listAvailableActivitiesMenu = await createListAvailableActivitiesMenu({ activitieNames });
+        const menu = menuAddOption({
+            menu: listActivitiesToSendActivityMenu, optionData: activitieNames.map(name => {
+                return {
+                    label: name, value: name
+                }
+            })
+        })
+        if (menu.isLeft())
+            return await editErrorReply({
+                error: menu.value.error, interaction,
+                title: menu.value.error.message
+            })
 
         return await interaction.editReply({
             content: "Selecione a atividade:",
-            components: [await makeStringSelectMenuComponent(listAvailableActivitiesMenu)],
+            components: [menu.value.menu],
         });
     },
 });

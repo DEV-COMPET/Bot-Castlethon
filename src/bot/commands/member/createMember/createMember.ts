@@ -3,12 +3,10 @@ import { Command } from "@/bot/structures/Command";
 import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
 import { description, name } from "./createMemberData.json";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
-import { makeStringSelectMenu, makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
-
-import selectMemberMenuData from "@/bot/selectMenus/createMember/selectMemberMenuData.json"
-import { ComponentType } from "discord.js";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { MemberType } from "@/api/modules/members/entities/member.entity";
+import { menuAddOption } from "@/bot/utils/discord/makeSelectMenu";
+import { selectMemberMenu } from "@/bot/selectMenus/createMember/selectMemberMenu";
 
 export interface MemberData {
     id: string,
@@ -67,7 +65,7 @@ export default new Command({
         const addedMembers: MemberType[] = getNotAddedMembersResponse.value.responseData;
         const addableMembers = membersData.filter(memberData => memberData.id !== addedMembers.find(addedMember => addedMember.discord_id === memberData.id)?.discord_id);
 
-        if(addableMembers.length === 0){
+        if (addableMembers.length === 0) {
             return await editErrorReply({
                 error: new Error(),
                 interaction,
@@ -75,28 +73,24 @@ export default new Command({
             });
         }
 
-        const { customId, minMax } = selectMemberMenuData;
-
-        const listServerMembersMenu = makeStringSelectMenu({
-            customId: customId,
-            type: ComponentType.StringSelect,
-            options: addableMembers.map(memberData => {
-
+        const menu = menuAddOption({
+            menu: selectMemberMenu, optionData: addableMembers.map(memberData => {
                 const { id, nickName, username } = memberData;
-
                 return {
                     label: `${username} (${nickName})`,
                     value: id
                 }
             }),
-            maxValues: minMax.max,
-            minValues: minMax.min
-        });
+        })
+        if (menu.isLeft()) {
+            return await editErrorReply({
+                error: menu.value.error, interaction, title: "Failed to create menu."
+            });
+        }
 
-        // Step 2: Edit the initial reply
-        await interaction.editReply({
+        return await interaction.editReply({
             content: "Usuarios Disponíveis:",
-            components: [await makeStringSelectMenuComponent(listServerMembersMenu)],
+            components: [menu.value.menu],
         });
     },
 });
