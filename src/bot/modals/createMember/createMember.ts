@@ -4,10 +4,10 @@ import { makeModal } from "@/bot/utils/modal/makeModal"
 import commandData from "@/bot/commands/member/createMember/createMemberData.json"
 import modalData from "./createMemberInputs.json"
 import { extractInputData } from "./utils/extractInputData";
-import { addMemberToDB } from "./utils/addMemberToDB";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { sucessReply } from "@/bot/utils/discord/editSucessReply";
 import { selectedUserData } from "@/bot/selectMenus/createMember/variables/userData";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 
 const { inputFields }: { inputFields: TextInputComponentData[] } = modalData
 
@@ -39,13 +39,20 @@ export default new Modal({
         const { nickName, username, id, avatarURL } = selectedUserData[selectedUserData.length - 1] || {};
         const discordName = nickName ? nickName : (username ? username : "");
 
-        const addMemberToDBReponse = await addMemberToDB({
-            discord_id: id, discord_username: username, discord_nickname: nickName,
-            inputData: { email, institution, name: name || discordName }
+        //const addMemberToDBReponse = await addMemberToDB({
+        //    discord_id: id, discord_username: username, discord_nickname: nickName,
+        //    inputData: { email, institution, name: name || discordName }
+        //})
+        const addMemberToDBResponse = await fetchDataFromAPI({
+            json: true, method: "post", url: "/member/",
+            bodyData: {
+                discord_id: id, discord_username: username, discord_nickname: nickName,
+                email, institution, name: name || discordName, role: "USER"
+            }
         })
-        if (addMemberToDBReponse.isLeft())
+        if (addMemberToDBResponse.isLeft())
             return await errorReply({
-                error: addMemberToDBReponse.value.error,
+                error: addMemberToDBResponse.value.error,
                 interaction, title: "Não foi possivel cirar o membro"
             })
 

@@ -1,10 +1,10 @@
 import { SelectMenu } from "@/bot/structures/SelectMenu";
 import { customId } from "./deleteTeamMenuData.json"
 import { teamsRemovableData } from "@/bot/commands/team/deleteTeam/variables/teamdRemovableData";
-import { removeTeamFromDB } from "@/bot/commands/team/deleteTeam/utils/removeTeamInDB";
 import { removeTeamFromDiscord } from "./utils/removeTeamFromDiscord";
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { sucessReply } from "@/bot/utils/discord/editSucessReply";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 
 export default new SelectMenu({
     customId: customId,
@@ -24,7 +24,10 @@ export default new SelectMenu({
             })
 
         if (possibleDBName) {
-            const removeTeamFromDBResponse = await removeTeamFromDB({ name: possibleDBName })
+            // const removeTeamFromDBResponse = await removeTeamFromDB({ name: possibleDBName })
+            const removeTeamFromDBResponse = await fetchDataFromAPI({
+                json: true, method: "delete", url: "/team/", bodyData: { name: possibleDBName }
+            })
             if (removeTeamFromDBResponse.isLeft())
                 return await errorReply({
                     interaction, title: "Erro ao remover o time do DB", error: removeTeamFromDBResponse.value.error

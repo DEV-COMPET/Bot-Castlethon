@@ -1,10 +1,11 @@
-import { Either, right } from "@/api/@types/either";
+import { Either, left, right } from "@/api/@types/either";
 import { ResourceNotFoundError } from "@/api/errors/resourceNotFoundError";
-import { getTeamNamesInDB } from "./getTeamNames";
 import { ExtendedInteraction } from "@/bot/typings/Commands";
 import { Role, getDiscordTeamData } from "./getTeamNamesInDiscordRoles";
 import { DiscordError } from "@/bot/errors/discordError";
 import { teamsRemovableData } from "../variables/teamdRemovableData";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { TeamType } from "@/api/modules/teams/entities/team.entity";
 
 type GetRemovableTeamsNameResponse = Either<
   { error: DiscordError | ResourceNotFoundError },
@@ -22,11 +23,17 @@ export interface DiscordDataItem {
 
 export async function getRemovableTeamsName({ interaction }: GetRemovableTeamsNameRequest): Promise<GetRemovableTeamsNameResponse> {
 
-  const getTeamNamesInDBResponse = await getTeamNamesInDB()
+  // const getTeamNamesInDBResponse = await getTeamNamesInDB()
+  const getTeamNamesInDBResponse = await fetchDataFromAPI({
+    json: true, method: "get", url: "/team/"
+  })
+  if (getTeamNamesInDBResponse.isLeft())
+    return left({ error: getTeamNamesInDBResponse.value.error })
+  
+  const teams: TeamType[] = getTeamNamesInDBResponse.value.responseData
+  const DBNames: string[] = teams.map(team => team.name.toLowerCase())
 
   const getDiscordTeamDataResponse = await getDiscordTeamData({ interaction })
-
-  const DBNames: string[] = (getTeamNamesInDBResponse.isRight() ? getTeamNamesInDBResponse.value.teamNames : [])
 
   const discordData: Role[] = getDiscordTeamDataResponse.isRight() ? getDiscordTeamDataResponse.value.roles : []
 

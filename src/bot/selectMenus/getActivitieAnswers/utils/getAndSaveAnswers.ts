@@ -1,12 +1,12 @@
 import { uploadMetaToFolder } from "@/bot/utils/googleAPI/googleDrive/uploadMetaToFolder";
 import { getLastResponseMeta, FileResponse, DriveResponse } from "./getLastResponseMeta";
-import { saveAnswerOnDB } from "./saveAnswerOnDB";
 import { DiscordError } from "@/bot/errors/discordError";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { ExtendedStringSelectMenuInteraction } from "@/bot/typings/SelectMenu";
 import { Either, left, right } from "@/api/@types/either";
 import { createFolder } from "@/bot/utils/googleAPI/googleDrive/createFolder";
 import { copyFromDriveLinkToDriveLink } from "@/bot/utils/googleAPI/googleDrive/copyFromDriveLinkToDriveLink";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 
 interface GetAndSaveAnswersRequest {
     activity: ActivityType
@@ -38,7 +38,10 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
 
         const { answer, teamName } = getLastResponseMetaResponse.value;
 
-        const saveAnswerOnDBResponse = await saveAnswerOnDB({ activityName: activity.name, teamName });
+        // const saveAnswerOnDBResponse = await saveAnswerOnDB({ activityName: activity.name, teamName });
+        const saveAnswerOnDBResponse = await fetchDataFromAPI({ 
+            json: true, method: "POST", url: `/answer/`, bodyData: { teamName, activityName: activity.name } 
+        });
         if (saveAnswerOnDBResponse.isLeft())
             return left({
                 error: saveAnswerOnDBResponse.value.error

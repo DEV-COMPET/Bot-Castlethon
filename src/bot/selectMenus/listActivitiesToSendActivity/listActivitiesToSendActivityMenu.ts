@@ -6,7 +6,7 @@ import { ChannelType } from "discord.js";
 import { makeSuccessEmbed } from "@/bot/utils/embed/makeSuccessEmbed";
 import { ActivityMessage, ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
-import { getTeamsTextChannels } from "@/bot/commands/activity/announceActivity/utils/getTeamsTextChannels";
+import { TeamType } from "@/api/modules/teams/entities/team.entity";
 
 export default new SelectMenu({
     customId: customId,
@@ -30,13 +30,18 @@ export default new SelectMenu({
                 error: new Error("Guild não encontrada"), interaction, title: "Erro ao pegar a guild"
             })
 
-        const getTeamsTextChannelsResponse = await getTeamsTextChannels();
+        // const getTeamsTextChannelsResponse = await getTeamsTextChannels();
+        const getTeamsTextChannelsResponse = await fetchDataFromAPI({ json: true, method: "GET", url: `/team/` })
         if (getTeamsTextChannelsResponse.isLeft())
             return await editErrorReply({
                 error: getTeamsTextChannelsResponse.value.error, interaction, title: "Erro ao pegar os canais de texto"
             })
 
-        const { teamsTextChannels } = getTeamsTextChannelsResponse.value
+        const teams = getTeamsTextChannelsResponse.value.responseData as TeamType[]
+        const teamsTextChannels = teams
+            .map(team => team.name
+                .toLowerCase()
+                .replace(/\s/g, "-"))
         const teamsDiscordTextChannels = guild.channels.cache
             .filter(channel => teamsTextChannels.includes(channel.name))
 

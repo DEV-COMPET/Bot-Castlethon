@@ -5,7 +5,8 @@ import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { MemberData } from "@/bot/commands/member/createMember/createMember";
 import { createSelectMemberToBeAddedMenu } from "./utils/createTeamsMenu";
 import { teamChosen } from "./variables/teamChosen";
-import { getAvailableMembers } from "./utils/getAvailableMemberss";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { MemberType } from "@/api/modules/members/entities/member.entity";
 
 export default new SelectMenu({
     customId,
@@ -38,20 +39,27 @@ export default new SelectMenu({
             };
         });
 
-        const availableMembers = await getAvailableMembers({ membersData })
+//        const availableMembers = await getAvailableMembers({ membersData })
+        // const availableMembers = await getAvailableMembers({ membersData })
+        const availableMembers = await  fetchDataFromAPI({ json: true, method: "get", url: `/member/` })
         if (availableMembers.isLeft()) {
             return await errorReply({
                 error: availableMembers.value.error, interaction, title: "Erro ao buscar membros disponiveis"
             });
         }
 
-        if (availableMembers.value.addableMembers.length === 0) {
+        const addedMembers: MemberType[] = await availableMembers.value.responseData;
+        const addableMembers = membersData
+            .filter(memberData => memberData.id === addedMembers
+                .find(addedMember => addedMember.discord_id === memberData.id)?.discord_id);
+
+        if (addableMembers.length === 0) {
             return await errorReply({
                 error: new Error(), interaction, title: "Nenhum membro disponivel"
             });
         }
 
-        const selectMemberToBeAddedMenu = createSelectMemberToBeAddedMenu({ availableMembers: availableMembers.value.addableMembers })
+        const selectMemberToBeAddedMenu = createSelectMemberToBeAddedMenu({ availableMembers: addableMembers })
 
         await interaction.reply({
             content: `Time selecionado: ${teamName}\nMembros disponiveis:`,

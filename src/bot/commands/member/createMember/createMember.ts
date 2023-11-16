@@ -7,7 +7,8 @@ import { makeStringSelectMenu, makeStringSelectMenuComponent } from "@/bot/utils
 
 import selectMemberMenuData from "@/bot/selectMenus/createMember/selectMemberMenuData.json"
 import { ComponentType } from "discord.js";
-import { getNotAddedMembers } from "./utils/getNotAddedMembers";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { MemberType } from "@/api/modules/members/entities/member.entity";
 
 export interface MemberData {
     id: string,
@@ -51,7 +52,10 @@ export default new Command({
             };
         });
 
-        const getNotAddedMembersResponse = await getNotAddedMembers({ membersData })
+        //const getNotAddedMembersResponse = await getNotAddedMembers({ membersData })
+        const getNotAddedMembersResponse = await fetchDataFromAPI({
+            json: true, method: "get", url: "/member/"
+        })
         if (getNotAddedMembersResponse.isLeft()) {
             return await editErrorReply({
                 error: getNotAddedMembersResponse.value.error,
@@ -60,7 +64,10 @@ export default new Command({
             });
         }
 
-        if(getNotAddedMembersResponse.value.addableMembers.length === 0){
+        const addedMembers: MemberType[] = getNotAddedMembersResponse.value.responseData;
+        const addableMembers = membersData.filter(memberData => memberData.id !== addedMembers.find(addedMember => addedMember.discord_id === memberData.id)?.discord_id);
+
+        if(addableMembers.length === 0){
             return await editErrorReply({
                 error: new Error(),
                 interaction,
@@ -73,7 +80,7 @@ export default new Command({
         const listServerMembersMenu = makeStringSelectMenu({
             customId: customId,
             type: ComponentType.StringSelect,
-            options: getNotAddedMembersResponse.value.addableMembers.map(memberData => {
+            options: addableMembers.map(memberData => {
 
                 const { id, nickName, username } = memberData;
 

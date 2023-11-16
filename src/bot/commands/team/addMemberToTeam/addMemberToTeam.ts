@@ -1,10 +1,11 @@
 import { Command } from "@/bot/structures/Command";
 import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
-import { getTeamNames } from "./utils/getTeamNames";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 import { description, name } from "./addMemberToTeamInfo.json"
 import { createSelectTeamMenu } from "./utils/createSelectTeamMenu";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { Team } from "discord.js";
 
 export default new Command({
     name, description,
@@ -16,14 +17,19 @@ export default new Command({
         if (isNotAdmin.isRight())
             return isNotAdmin.value.response
 
-        const getTeamNamesResponse = await getTeamNames()
+        const getTeamNamesResponse = await fetchDataFromAPI({
+            json: true, method: "get", url: "/team/"
+        })
         if (getTeamNamesResponse.isLeft())
             return await editErrorReply({
                 error: getTeamNamesResponse.value.error,
                 interaction, title: "Nenhum time cadastrado"
             })
 
-        const selectTeamMenu = await createSelectTeamMenu({ teamNames: getTeamNamesResponse.value.teamNames })
+        const teams: Team[] = getTeamNamesResponse.value.responseData
+        const teamNames = teams.map(team => team.name)
+
+        const selectTeamMenu = await createSelectTeamMenu({ teamNames })
 
         await interaction.editReply({
             content: "Selecione o time:",

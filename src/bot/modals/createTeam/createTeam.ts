@@ -6,10 +6,10 @@ import modalData from "./createTeamInputs.json"
 import { errorReply } from "@/bot/utils/discord/editErrorReply";
 import { sucessReply } from "@/bot/utils/discord/editSucessReply";
 import { extractInputData } from "./utils/extractInputData";
-import { addTeamToDB } from "./utils/addTeamToDB";
 import { createRole } from "./utils/createRole";
 import { teamColor } from "@/bot/selectMenus/createTeam/variables/color";
 import { createRoleChats } from "./utils/createRoleChats";
+import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 
 const { inputFields }: { inputFields: TextInputComponentData[] } = modalData
 
@@ -28,7 +28,8 @@ export default new Modal({
 
         const { institution, name } = extractInputData({ interaction, inputFields })
 
-        const addTeamToDBReponse = await addTeamToDB({ institution, name })
+        // const addTeamToDBReponse = await addTeamToDB({ institution, name })
+        const addTeamToDBReponse = await fetchDataFromAPI({ json: true, method: "post", url: "/team/", bodyData: { institution, name } })
         if (addTeamToDBReponse.isLeft())
             return await errorReply({
                 error: addTeamToDBReponse.value.error,
