@@ -5,6 +5,7 @@ import { editSucessReply } from "@/bot/utils/discord/editSucessReply";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { deleteActivityFolder } from "@/bot/utils/googleAPI/googleDrive/deleteFolder";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 
 export default new SelectMenu({
     customId: customId,
@@ -12,6 +13,8 @@ export default new SelectMenu({
     run: async ({ interaction }) => {
 
         await interaction.deferReply({ ephemeral: true });
+
+        await editLoadingReply({ interaction, title: "(1/2) Deletando do DB...." })
 
         const activityName = interaction.values[0] as string
 
@@ -26,7 +29,7 @@ export default new SelectMenu({
 
         const activity = fetchActivity.value.responseData as ActivityType
 
-        console.dir({ activity })
+        await editLoadingReply({ interaction, title: "(2/2) Deletando do Google Drive...." })
 
         const deleteActivityFolderInDriveResponse = await deleteActivityFolder({ id: activity.descriptionFileDir as string })
         if (deleteActivityFolderInDriveResponse.isLeft())
@@ -37,7 +40,6 @@ export default new SelectMenu({
         return await editSucessReply({
             interaction, title: `Atividade '${activityName}' removida com sucesso!`
         });
-
     }
 });
 

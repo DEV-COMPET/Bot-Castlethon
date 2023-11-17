@@ -4,11 +4,11 @@ import { checkIfNotAdmin } from "@/bot/utils/embed/checkIfNotAdmin";
 import { description, name } from "./createMemberData.json";
 import { editErrorReply } from "@/bot/utils/discord/editErrorReply";
 import { makeStringSelectMenu, makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
-
-import selectMemberMenuData from "@/bot/selectMenus/createMember/selectMemberMenuData.json"
+import { customId, minMax } from "@/bot/selectMenus/createMember/selectMemberMenuData.json"
 import { ComponentType } from "discord.js";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { MemberType } from "@/api/modules/members/entities/member.entity";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 
 export interface MemberData {
     id: string,
@@ -22,31 +22,27 @@ export default new Command({
     description,
     run: async function ({ interaction }) {
 
-        // Step 1: Defer the reply
         await interaction.deferReply({ ephemeral: true });
 
         const isNotAdmin = await checkIfNotAdmin(interaction);
-        if (isNotAdmin.isRight()) {
+        if (isNotAdmin.isRight()) 
             return isNotAdmin.value.response;
-        }
 
         const guild = interaction.guild;
-
-        if (!guild) {
+        if (!guild) 
             return await editErrorReply({
                 error: new Error(), interaction, title: "This command can only be used in a server."
             });
-        }
+
+        await editLoadingReply({ interaction, title: `Buscando membros ainda não adicionados no DB` })
 
         const members = await guild.members.fetch();
 
         const membersData: MemberData[] = members.map(member => {
-
-            const { id, globalName, username, } = member.user;
-
+            const { id, globalName, username } = member.user;
             return {
                 id,
-                nickName: globalName ?? "", // Provide a default value if globalName is null
+                nickName: globalName ?? "",
                 username,
                 avatarURL: ""
             };
@@ -67,7 +63,7 @@ export default new Command({
         const addedMembers: MemberType[] = getNotAddedMembersResponse.value.responseData;
         const addableMembers = membersData.filter(memberData => memberData.id !== addedMembers.find(addedMember => addedMember.discord_id === memberData.id)?.discord_id);
 
-        if(addableMembers.length === 0){
+        if (addableMembers.length === 0) {
             return await editErrorReply({
                 error: new Error(),
                 interaction,
@@ -75,26 +71,15 @@ export default new Command({
             });
         }
 
-        const { customId, minMax } = selectMemberMenuData;
-
         const listServerMembersMenu = makeStringSelectMenu({
-            customId: customId,
+            customId,
             type: ComponentType.StringSelect,
-            options: addableMembers.map(memberData => {
-
-                const { id, nickName, username } = memberData;
-
-                return {
-                    label: `${username} (${nickName})`,
-                    value: id
-                }
-            }),
+            options: addableMembers.map(memberData => { return { label: `${memberData.username} (${memberData.nickName})`, value: memberData.id } }),
             maxValues: minMax.max,
             minValues: minMax.min
         });
 
-        // Step 2: Edit the initial reply
-        await interaction.editReply({
+        return await interaction.editReply({
             content: "Usuarios Disponíveis:",
             components: [await makeStringSelectMenuComponent(listServerMembersMenu)],
         });

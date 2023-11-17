@@ -1,6 +1,7 @@
 import { Either, left, right } from "@/api/@types/either";
 import { DiscordError } from "@/bot/errors/discordError";
 import { ExtendedModalInteraction } from "@/bot/typings/Modals";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 import { Role, VoiceChannel, TextChannel, ChannelType, CategoryChannel } from "discord.js";
 
 interface CreateRoleChatsRequest {
@@ -28,6 +29,8 @@ export async function createRoleChats({ interaction, name, role }: CreateRoleCha
         });
     }
 
+    await editLoadingReply({ interaction, title: `(3.1/3.3) Criando categoria` })
+
     const category: CategoryChannel = await guild.channels.create({
         name, permissionOverwrites: [
             {
@@ -43,6 +46,8 @@ export async function createRoleChats({ interaction, name, role }: CreateRoleCha
     })
     if (!category)
         return left({ error: new DiscordError(`Erro ao criar a categoria do time ${name}`) });
+
+    await editLoadingReply({ interaction, title: `(3.2/3.3) Criando canal de voz` })
 
     const voiceChannel: VoiceChannel = await guild.channels.create({
         name,
@@ -61,6 +66,8 @@ export async function createRoleChats({ interaction, name, role }: CreateRoleCha
     });
     if (!voiceChannel)
         return left({ error: new DiscordError(`Erro ao criar o canal de voz do time ${name}`) });
+
+    await editLoadingReply({ interaction, title: `(3.3/3.3) Criando canal de texto` })
 
     const textChannel: TextChannel = await guild.channels.create({
         name,

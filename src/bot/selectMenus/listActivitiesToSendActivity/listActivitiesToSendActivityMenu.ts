@@ -7,6 +7,7 @@ import { makeSuccessEmbed } from "@/bot/utils/embed/makeSuccessEmbed";
 import { ActivityMessage, ActivityType } from "@/api/modules/activities/entities/activity.entity";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { TeamType } from "@/api/modules/teams/entities/team.entity";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 
 export default new SelectMenu({
     customId: customId,
@@ -15,6 +16,8 @@ export default new SelectMenu({
         await interaction.deferReply({ ephemeral: true });
 
         const activityName = interaction.values[0] as string
+
+        await editLoadingReply({ interaction, title: "(1/3) Carregando dados da atividade..." })
 
         const fetchDataFromAPIResponse = await fetchDataFromAPI({ json: true, method: "GET", url: `/activity/${activityName}` })
         if (fetchDataFromAPIResponse.isLeft())
@@ -30,6 +33,8 @@ export default new SelectMenu({
                 error: new Error("Guild não encontrada"), interaction, title: "Erro ao pegar a guild"
             })
 
+        await editLoadingReply({ interaction, title: "(2/3) Selecionando canais para divulgação..." })
+
         // const getTeamsTextChannelsResponse = await getTeamsTextChannels();
         const getTeamsTextChannelsResponse = await fetchDataFromAPI({ json: true, method: "GET", url: `/team/` })
         if (getTeamsTextChannelsResponse.isLeft())
@@ -44,6 +49,8 @@ export default new SelectMenu({
                 .replace(/\s/g, "-"))
         const teamsDiscordTextChannels = guild.channels.cache
             .filter(channel => teamsTextChannels.includes(channel.name))
+
+        await editLoadingReply({ interaction, title: "(3/3) Divulgando!!" })
 
         const messagesIds = await Promise.all(
             teamsDiscordTextChannels.map(async (channel) => {
@@ -68,9 +75,6 @@ export default new SelectMenu({
             return await editErrorReply({
                 error: new Error("Não foi possível enviar as mensagens"), interaction, title: "Erro ao enviar as mensagens"
             })
-
-
-        console.dir(messagesIds, { depth: null })
 
         const storeActivitiesMessagesResponse = await fetchDataFromAPI({
             json: true,

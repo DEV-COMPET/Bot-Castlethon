@@ -25,12 +25,10 @@ export default new SelectMenu({
 
         const getAndSaveAnswersResponse = await getAndSaveAnswers({ activity, interaction })
         if (getAndSaveAnswersResponse.isLeft()) {
-            console.log("Viu que é left")
             return await editErrorReply({
                 error: getAndSaveAnswersResponse.value.error, interaction, title: "Erro ao salvar as respostas"
             })
         }
-        console.log("Indo retornar")
             
         return await editSucessReply({
             interaction, title: "Arquivo enviado com sucesso!",

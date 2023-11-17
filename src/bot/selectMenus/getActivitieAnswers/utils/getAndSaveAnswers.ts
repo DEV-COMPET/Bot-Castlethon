@@ -7,6 +7,7 @@ import { Either, left, right } from "@/api/@types/either";
 import { createFolder } from "@/bot/utils/googleAPI/googleDrive/createFolder";
 import { copyFromDriveLinkToDriveLink } from "@/bot/utils/googleAPI/googleDrive/copyFromDriveLinkToDriveLink";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 
 interface GetAndSaveAnswersRequest {
     activity: ActivityType
@@ -27,8 +28,12 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
 
     const answerStatus: AnswerStatus[] = [];
 
+    const size = activity.chatMessagesIds.length;
+    let i = 1;
     for (const channel of activity.chatMessagesIds) {
 
+        await editLoadingReply({ interaction, title: `Recebendo a resposta ${i} de ${size}` })
+        i++;
         const getLastResponseMetaResponse = await getLastResponseMeta({ interaction, refferenceMessageId: channel.messsageId, channelName: channel.textChannelName });
         if (getLastResponseMetaResponse.isLeft()) {
             return left({
@@ -39,8 +44,8 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
         const { answer, teamName } = getLastResponseMetaResponse.value;
 
         // const saveAnswerOnDBResponse = await saveAnswerOnDB({ activityName: activity.name, teamName });
-        const saveAnswerOnDBResponse = await fetchDataFromAPI({ 
-            json: true, method: "POST", url: `/answer/`, bodyData: { teamName, activityName: activity.name } 
+        const saveAnswerOnDBResponse = await fetchDataFromAPI({
+            json: true, method: "POST", url: `/answer/`, bodyData: { teamName, activityName: activity.name }
         });
         if (saveAnswerOnDBResponse.isLeft())
             return left({
@@ -49,6 +54,8 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
 
         switch (answer.type) {
             case "DRIVE":
+
+                await editLoadingReply({ interaction, title: `Resposta ${i}: Google Drive` })
 
                 const { link } = answer.data as DriveResponse;
 
@@ -59,11 +66,6 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
                     })
                 }
 
-                console.dir({
-                    destinLink: createFolderResponse.value.folderId, originLink: link
-                
-                })
-
                 const copyFromDriveLinkToDriveLinkResponse = await copyFromDriveLinkToDriveLink({
                     destinLink: createFolderResponse.value.folderId, originLink: link
                 })
@@ -72,12 +74,13 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
                         error: copyFromDriveLinkToDriveLinkResponse.value.error
                     })
                 }
-                // await downloadFromFolderLink(link)
 
                 answerStatus.push({ teamName, type: "DRIVE" })
                 break;
 
             case "FILE":
+
+                await editLoadingReply({ interaction, title: `Resposta ${i}: arquivo anexado` })
 
                 const { fileName, media } = answer.data as FileResponse;
 
@@ -99,10 +102,10 @@ export async function getAndSaveAnswers({ activity, interaction }: GetAndSaveAns
                 break;
 
             case "EMPTY":
-                answerStatus.push({ teamName, type: "EMPTY" })
-                break;
 
-            default:
+                await editLoadingReply({ interaction, title: `Resposta ${i}: Vazia` })
+
+                answerStatus.push({ teamName, type: "EMPTY" })
                 break;
         }
     }

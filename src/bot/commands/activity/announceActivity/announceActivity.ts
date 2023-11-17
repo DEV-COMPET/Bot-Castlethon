@@ -6,6 +6,7 @@ import { createListAvailableActivitiesMenu } from "./utils/createListAvailableAc
 import { makeStringSelectMenuComponent } from "@/bot/utils/modal/makeSelectMenu";
 import { fetchDataFromAPI } from "@/bot/utils/fetch/fetchData";
 import { ActivityType } from "@/api/modules/activities/entities/activity.entity";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 
 export default new Command({
     name,
@@ -19,6 +20,8 @@ export default new Command({
         if (isNotAdmin.isRight()) {
             return isNotAdmin.value.response;
         }
+
+        await editLoadingReply({ interaction, title: "(1/1) Carregando atividades..." })
 
         // const listAvailableActivitiesResponse = await listAvailableActivities();
         const listAvailableActivitiesResponse = await fetchDataFromAPI({
@@ -35,6 +38,8 @@ export default new Command({
             .filter(activity => activity.opened_at)
             .filter(activity => !activity.closed_at)
             .map(activity => activity.name)
+
+            console.dir({activitieNames}, {depth: null})
 
         if (activitieNames.length === 0)
             return await editErrorReply({

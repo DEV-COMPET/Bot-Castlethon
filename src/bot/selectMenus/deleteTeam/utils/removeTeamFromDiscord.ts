@@ -2,6 +2,7 @@ import { Either, left, right } from "@/api/@types/either";
 import { RoleData } from "@/bot/commands/team/deleteTeam/utils/getTeamNamesInDiscordRoles";
 import { DiscordError } from "@/bot/errors/discordError";
 import { ExtendedStringSelectMenuInteraction } from "@/bot/typings/SelectMenu";
+import { editLoadingReply } from "@/bot/utils/discord/editLoadingReply";
 import { ChannelType } from "discord.js";
 
 interface RemoveTeamFromDiscordRequest {
@@ -13,7 +14,6 @@ type RemoveTeamFromDiscordResponse = Either<
     { error: DiscordError },
     { name: string }
 >
-
 
 export async function removeTeamFromDiscord({ roleData, interaction }: RemoveTeamFromDiscordRequest): Promise<RemoveTeamFromDiscordResponse> {
 
@@ -31,6 +31,9 @@ export async function removeTeamFromDiscord({ roleData, interaction }: RemoveTea
         return left({ error: new DiscordError("Nenhum dos nomes passados é valido 1") });
 
     if (roleName) {
+
+        await editLoadingReply({ interaction, title: `1. Removendo Cargo` })
+
         const role = guild.roles.cache.find((role) => role.name.toLowerCase() === roleName)
         if (!role)
             return left({ error: new DiscordError(`Cargo "${roleName}" não encontrado`) });
@@ -39,6 +42,9 @@ export async function removeTeamFromDiscord({ roleData, interaction }: RemoveTea
     }
 
     if (categoryName) {
+
+        await editLoadingReply({ interaction, title: `2. Removendo categoria` })
+
         const category = guild.channels.cache.find(
             (channel) => channel.type === ChannelType.GuildCategory && channel.name.toLowerCase() === categoryName
         );
@@ -50,6 +56,9 @@ export async function removeTeamFromDiscord({ roleData, interaction }: RemoveTea
     }
 
     if (voiceChannelName) {
+
+        await editLoadingReply({ interaction, title: `3. Removendo canal de Voz` })
+
         const category = guild.channels.cache.find(
             (channel) => channel.type === ChannelType.GuildVoice && channel.name.toLowerCase() === voiceChannelName
         );
@@ -61,6 +70,8 @@ export async function removeTeamFromDiscord({ roleData, interaction }: RemoveTea
     }
 
     if (textChannelName) {
+
+        await editLoadingReply({ interaction, title: `4. Removendo canal de Texto` })
 
         const category = guild.channels.cache.find(
             (channel) => channel.type === ChannelType.GuildText && channel.name.toLowerCase().replaceAll('-', ' ') === textChannelName

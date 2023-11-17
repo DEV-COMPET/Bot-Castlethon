@@ -42,7 +42,7 @@ export default new Command({
             minValues: minMax.min
         });
 
-        await interaction.editReply({
+        return await interaction.editReply({
             content: "Cores Disponíveis:",
             components: [await makeStringSelectMenuComponent(listRoleColorsMenu)],
         });

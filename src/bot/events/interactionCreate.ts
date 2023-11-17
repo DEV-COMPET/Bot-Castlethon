@@ -23,6 +23,7 @@ export default new Event("interactionCreate", "on", async (interaction) => {
         interaction: interaction as ExtendedInteraction,
       });
     } catch (error) {
+      console.error(error);
       await interaction.followUp({
         content: "Houve um erro ao tentar executar esse comando",
         ephemeral: true,
